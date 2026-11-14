@@ -50,6 +50,7 @@ All metrics are evaluated against deterministic threshold rules and formatted in
 ### Display and Usability
 
 - **Interactive Main Menu**: Terminal dashboard featuring stylized ASCII branding, numbered shortcuts, and instant help manuals.
+- **Multi-Language Support (i18n)**: Full native localization supporting 8 languages (English, Spanish, Japanese, Russian, French, German, Chinese, Turkish) with runtime switching and persistent configuration.
 - **Advanced Diagnostic Views**: Dedicated expanded inspection screens for deep-dive analysis of individual subsystems.
 - **Real-Time Watch Mode**: Continuous auto-refreshing dashboard with configurable sampling intervals.
 - **Headless and Pipeline Support**: Full JSON schema export (`--json`) and plain-text logging compatibility (`--no-color`).
@@ -191,6 +192,45 @@ mingmu watch --interval 5
 mingmu watch --interval 2 --count 10
 ```
 
+#### Multi-Language Support (i18n)
+
+MingMu provides built-in localization across all metric labels, status badges, section headers, menus, and greeting prompts:
+
+```bash
+# View system overview in Spanish
+mingmu --lang es --all
+
+# View advanced battery diagnostics in Japanese
+mingmu --lang ja battery -a
+
+# View advanced CPU diagnostics in Russian
+mingmu --lang ru cpu -a
+
+# View advanced memory diagnostics in German
+mingmu --lang de ram -a
+
+# View system overview in French
+mingmu --lang fr --all
+
+# View system overview in Chinese
+mingmu --lang zh --all
+
+# View system overview in Turkish
+mingmu --lang tr --all
+```
+
+Supported language codes:
+- `en`: English (Default)
+- `es`: Spanish (Espanol)
+- `ja`: Japanese (Nihongo)
+- `ru`: Russian (Russkiy)
+- `fr`: French (Francais)
+- `de`: German (Deutsch)
+- `zh`: Chinese (Zhongwen)
+- `tr`: Turkish (Turkce)
+
+Language preferences can also be configured interactively via menu option `[6]` and are saved across sessions to `~/.mingmu/config.json`.
+
 #### Automation, Formatting, and Logging
 
 ```bash
@@ -254,15 +294,20 @@ mingmu/
 |   |   |-- help_view.py        # Complete documentation manual renderer
 |   |   |-- menu.py             # Interactive terminal menu loop and keyboard navigation
 |   |   `-- table.py            # Box-drawing Unicode table layout engine
+|   |-- i18n/
+|   |   |-- __init__.py         # Internationalization manager, configuration, and t() engine
+|   |   `-- translations.py     # Translation dictionaries for 8 supported languages
 |   `-- utils/
 |       |-- macos_sensors.py    # macOS IOHIDEventSystem thermal and power telemetry
 |       |-- platform_detect.py  # Platform detection for Windows, macOS, and Linux
 |       |-- thresholds.py       # Boundary containers and health classification rules
+|       |-- user_info.py        # System username and hardware model detection
 |       `-- windows_sensors.py  # Windows WMI/CIM and PowerShell telemetry integration
 `-- tests/
     |-- test_advanced.py        # Tests for advanced diagnostic sections, banners, and help view
     |-- test_collectors.py      # Tests for telemetry collectors and section builders
     |-- test_formatters.py      # Tests for string formatters and byte conversions
+    |-- test_i18n.py            # Tests for multi-language translation, fallback, and config
     `-- test_platform.py        # Tests for platform detection and Windows support
 ```
 

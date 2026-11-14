@@ -24,11 +24,13 @@ class UserDeviceInfo(NamedTuple):
 
     def welcome_message(self) -> str:
         """Return the formatted welcome greeting string."""
+        from mingmu.i18n import t
+
         if self.display_name and self.display_name.lower() != self.username.lower():
             user_part = f"{self.display_name} ({self.username})"
         else:
             user_part = self.username
-        return f"Hello {user_part}, you are using {self.device_model}."
+        return t("welcome", user=user_part, model=self.device_model)
 
 
 def _detect_macos_hardware() -> str:

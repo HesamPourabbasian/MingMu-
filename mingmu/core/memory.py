@@ -14,6 +14,7 @@ import psutil
 
 from mingmu.display.formatters import bytes_to_human, percent
 from mingmu.display.table import MetricRow, Section
+from mingmu.i18n import t
 from mingmu.utils.thresholds import MEMORY_USAGE, SWAP_USAGE, Status
 
 log = logging.getLogger(__name__)
@@ -72,32 +73,32 @@ def build_memory_section(info: MemoryInfo | None = None) -> Section:
     # Used / Total
     mem_status = MEMORY_USAGE.evaluate(info.percent_used)
     rows.append(MetricRow(
-        "Used / Total",
+        t("used_total"),
         f"{bytes_to_human(info.used)} / {bytes_to_human(info.total)}",
         mem_status,
     ))
 
     # Usage percentage
-    rows.append(MetricRow("Usage", percent(info.percent_used), mem_status))
+    rows.append(MetricRow(t("usage"), percent(info.percent_used), mem_status))
 
     # Available
-    rows.append(MetricRow("Available", bytes_to_human(info.available), Status.INFO))
+    rows.append(MetricRow(t("available"), bytes_to_human(info.available), Status.INFO))
 
     # Cached (Linux mainly)
     if info.cached > 0:
-        rows.append(MetricRow("Cached", bytes_to_human(info.cached), Status.INFO))
+        rows.append(MetricRow(t("cached", default="Cached"), bytes_to_human(info.cached), Status.INFO))
 
     # Swap
     if info.swap_total > 0:
         swap_status = SWAP_USAGE.evaluate(info.swap_percent)
         rows.append(MetricRow(
-            "Swap Used / Total",
+            t("swap_used_total", default="Swap (Used / Total)"),
             f"{bytes_to_human(info.swap_used)} / {bytes_to_human(info.swap_total)}",
             swap_status,
         ))
-        rows.append(MetricRow("Swap Usage", percent(info.swap_percent), swap_status))
+        rows.append(MetricRow(t("swap_usage"), percent(info.swap_percent), swap_status))
     else:
-        rows.append(MetricRow("Swap", "Not configured", Status.INFO))
+        rows.append(MetricRow(t("swap_space"), t("swap_inactive"), Status.INFO))
 
     # Overall
     all_statuses = [mem_status]
@@ -111,4 +112,4 @@ def build_memory_section(info: MemoryInfo | None = None) -> Section:
     else:
         overall = Status.GOOD
 
-    return Section(title="MEMORY", icon="💾", overall_status=overall, rows=rows)
+    return Section(title=t("sec_memory"), icon="💾", overall_status=overall, rows=rows)

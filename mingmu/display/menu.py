@@ -33,6 +33,13 @@ from mingmu.display.colors import (
 )
 from mingmu.display.help_view import render_help_view
 from mingmu.display.table import BOX, TableRenderer, _pad
+from mingmu.i18n import (
+    SUPPORTED_LANGUAGES,
+    get_language,
+    save_language_preference,
+    set_language,
+    t,
+)
 from mingmu.utils.user_info import get_user_device_info
 
 
@@ -45,9 +52,56 @@ def _pause() -> None:
     """Wait for user to press Enter before returning to menu."""
     print()
     try:
-        input(dim("  ↵ Press [Enter] to return to Main Menu..."))
+        input(dim(f"  ↵ {t('press_enter')}"))
     except (EOFError, KeyboardInterrupt):
         print()
+
+
+def _select_language_menu(renderer: TableRenderer) -> None:
+    """Interactive submenu to select interface language."""
+    _clear()
+    card_width = renderer.width
+    inner = card_width - 2
+
+    print(blue(BOX.top_left + BOX.horizontal * inner + BOX.top_right))
+    title = bold(bright_white(f"  🌐  {t('language_menu_title')}"))
+    print(blue(BOX.vertical) + _pad(title, inner) + blue(BOX.vertical))
+    print(blue(BOX.t_right + BOX.horizontal * inner + BOX.t_left))
+
+    current_code = get_language()
+    lang_list = list(SUPPORTED_LANGUAGES.items())
+
+    for idx, (code, (native_name, eng_name)) in enumerate(lang_list, start=1):
+        is_current = "  ● (active)" if code == current_code else ""
+        key_tag = cyan(bold(f" [{idx}] "))
+        label = f"{native_name}  ·  {eng_name}{is_current}"
+        line = f"  {key_tag} {bold(white(label))}"
+        print(blue(BOX.vertical) + _pad(line, inner) + blue(BOX.vertical))
+
+    # Back option
+    back_line = f"  {cyan(bold(' [0] '))} {bold(white(t('menu_opt_0_title') + ' / Return'))}"
+    print(blue(BOX.vertical) + _pad(back_line, inner) + blue(BOX.vertical))
+    print(blue(BOX.bottom_left + BOX.horizontal * inner + BOX.bottom_right))
+    print()
+
+    try:
+        choice = input(bold(cyan("  明眸 ❯ ")) + bright_white(f"Select language [1-{len(lang_list)}, 0]: ")).strip()
+    except (KeyboardInterrupt, EOFError):
+        return
+
+    if choice in ("0", "q", "exit", "back"):
+        return
+
+    try:
+        choice_idx = int(choice)
+        if 1 <= choice_idx <= len(lang_list):
+            selected_code, (nat_name, _) = lang_list[choice_idx - 1]
+            set_language(selected_code)
+            save_language_preference(selected_code)
+            print(green(f"\n  ✓ {t('language_saved', lang=nat_name)}"))
+            time.sleep(1.2)
+    except ValueError:
+        pass
 
 
 def show_menu(width: int | None = None) -> None:
@@ -66,26 +120,27 @@ def show_menu(width: int | None = None) -> None:
 
         # Menu options frame
         menu_items = [
-            ("1", "📊", "Full System Overview", "All-in-one summary of Battery, CPU, & RAM"),
-            ("2", "🔋", "Advanced Battery Monitor", "Detailed charging, health, voltage, & wattage"),
-            ("3", "🖥 ", "Advanced CPU Monitor", "Per-core bars, SoC die temps, & top processes"),
-            ("4", "💾", "Advanced Memory Monitor", "RAM breakdown, active/wired, swap, & top consumers"),
-            ("5", "⏱ ", "Live Watch Dashboard", "Auto-refreshing real-time system monitor"),
-            ("6", "❓", "Help & Documentation", "Complete guide explaining metrics, thresholds, & CLI"),
-            ("0", "🚪", "Exit", "Close MingMu"),
+            ("1", "📊", t("menu_opt_1_title"), t("menu_opt_1_desc")),
+            ("2", "🔋", t("menu_opt_2_title"), t("menu_opt_2_desc")),
+            ("3", "🖥 ", t("menu_opt_3_title"), t("menu_opt_3_desc")),
+            ("4", "💾", t("menu_opt_4_title"), t("menu_opt_4_desc")),
+            ("5", "⏱ ", t("menu_opt_5_title"), t("menu_opt_5_desc")),
+            ("6", "🌐", t("menu_opt_6_title"), t("menu_opt_6_desc")),
+            ("7", "❓", t("menu_opt_7_title"), t("menu_opt_7_desc")),
+            ("0", "🚪", t("menu_opt_0_title"), t("menu_opt_0_desc")),
         ]
 
         # Draw menu card using full width
         card_width = renderer.width
         inner = card_width - 2
         print(blue(BOX.top_left + BOX.horizontal * inner + BOX.top_right))
-        menu_title = bold(bright_white("  🧭  SELECT MONITORING VIEW"))
+        menu_title = bold(bright_white(f"  🧭  {t('select_view')}"))
         print(blue(BOX.vertical) + _pad(menu_title, inner) + blue(BOX.vertical))
         print(blue(BOX.t_right + BOX.horizontal * inner + BOX.t_left))
 
         for key, icon, title, desc in menu_items:
             key_tag = cyan(bold(f" [{key}] "))
-            title_tag = bold(white(f"{icon} {title:<26}"))
+            title_tag = bold(white(f"{icon} {title:<28}"))
             desc_tag = dim(f"· {desc}")
             line = f"  {key_tag} {title_tag} {desc_tag}"
             print(blue(BOX.vertical) + _pad(line, inner) + blue(BOX.vertical))
@@ -94,13 +149,13 @@ def show_menu(width: int | None = None) -> None:
         print()
 
         try:
-            choice = input(bold(cyan("  明眸 ❯ ")) + bright_white("Enter choice [0-6]: ")).strip()
+            choice = input(bold(cyan("  明眸 ❯ ")) + bright_white(t("enter_choice"))).strip()
         except (KeyboardInterrupt, EOFError):
-            print("\n" + cyan("  MingMu stopped. Goodbye! 👋\n"))
+            print("\n" + cyan(f"  {t('stopped_goodbye')} 👋\n"))
             break
 
         if choice in ("0", "q", "exit", "quit"):
-            print("\n" + cyan("  MingMu stopped. Goodbye! 👋\n"))
+            print("\n" + cyan(f"  {t('stopped_goodbye')} 👋\n"))
             break
 
         elif choice == "1":
@@ -132,12 +187,15 @@ def show_menu(width: int | None = None) -> None:
             _run_interactive_watch(renderer)
 
         elif choice == "6":
+            _select_language_menu(renderer)
+
+        elif choice == "7":
             _clear()
             print(render_help_view(width=renderer.width))
             _pause()
 
         else:
-            print(red("\n  ⚠  Invalid option. Please enter a number between 0 and 6."))
+            print(red(f"\n  ⚠  {t('invalid_option')}"))
             time.sleep(1.0)
 
 
@@ -154,7 +212,7 @@ def _run_interactive_watch(renderer: TableRenderer) -> None:
             ]
             print(renderer.render(sections))
             print()
-            print(dim(f"  ↻  Live Monitoring (every {interval}s)  ·  Press Ctrl+C to return to Menu"))
+            print(dim(f"  ↻  {t('live_monitoring', interval=interval)}"))
             time.sleep(interval)
     except KeyboardInterrupt:
         pass

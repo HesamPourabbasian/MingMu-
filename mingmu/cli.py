@@ -42,6 +42,7 @@ from mingmu.display.colors import disable_colors
 from mingmu.display.help_view import render_help_view
 from mingmu.display.menu import show_menu
 from mingmu.display.table import Section, TableRenderer
+from mingmu.i18n import SUPPORTED_LANGUAGES, init_language, t
 from mingmu.utils.platform_detect import get_platform_info, is_supported
 
 
@@ -132,6 +133,12 @@ class MingMuGroup(click.Group):
 )
 @click.option("--all", "show_all", is_flag=True, help="Print full system overview table directly.")
 @click.option("--menu", "force_menu", is_flag=True, help="Launch interactive main menu.")
+@click.option(
+    "-l", "--lang",
+    type=click.Choice(list(SUPPORTED_LANGUAGES.keys()), case_sensitive=False),
+    default=None,
+    help="Set interface language (en, es, ja, ru, fr, de, zh, tr).",
+)
 @click.option("--no-color", is_flag=True, help="Disable coloured output.")
 @click.option("--json", "as_json", is_flag=True, help="Output in JSON format.")
 @click.option("--width", type=int, default=None, help="Force table width (columns).")
@@ -141,6 +148,7 @@ def main(
     ctx: click.Context,
     show_all: bool,
     force_menu: bool,
+    lang: str | None,
     no_color: bool,
     as_json: bool,
     width: int | None,
@@ -149,9 +157,12 @@ def main(
     ctx.ensure_object(dict)
     ctx.obj["show_all"] = show_all
     ctx.obj["force_menu"] = force_menu
+    ctx.obj["lang"] = lang
     ctx.obj["no_color"] = no_color
     ctx.obj["as_json"] = as_json
     ctx.obj["width"] = width
+
+    init_language(cli_override=lang)
 
     if no_color:
         disable_colors()
@@ -245,7 +256,7 @@ def watch_cmd(ctx: click.Context, interval: float, max_count: int | None) -> Non
     Press Ctrl+C to stop.
     """
     def _handle_sigint(signum: int, frame: object) -> None:
-        click.echo("\n" + click.style("  MingMu stopped. Goodbye! 👋", fg="cyan"))
+        click.echo("\n" + click.style(f"  {t('stopped_goodbye')} 👋", fg="cyan"))
         sys.exit(0)
 
     signal.signal(signal.SIGINT, _handle_sigint)
@@ -264,7 +275,7 @@ def watch_cmd(ctx: click.Context, interval: float, max_count: int | None) -> Non
             click.echo(table)
             click.echo()
             from mingmu.display.colors import dim as dim_text
-            click.echo(dim_text(f"  ↻  Refreshing every {interval}s  ·  Press Ctrl+C to stop"))
+            click.echo(dim_text(f"  ↻  {t('live_monitoring', interval=interval)}"))
 
         iteration += 1
         if max_count is not None and iteration >= max_count:

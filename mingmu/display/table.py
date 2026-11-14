@@ -13,6 +13,7 @@ from dataclasses import dataclass, field
 from typing import Sequence
 
 from mingmu import __app_name__, __app_name_cn__, __version__
+from mingmu.i18n import t
 from mingmu.display.colors import (
     blue,
     bold,
@@ -190,7 +191,7 @@ class TableRenderer:
         lines.append(blue(BOX.vertical) + _pad(header_line, self.inner) + blue(BOX.vertical))
 
         if not section.rows:
-            lines.append(self._row(dim("  No data available")))
+            lines.append(self._row(dim(f"  {t('no_data_available', default='No data available')}")))
             return
 
         # Column layout: | Metric | Value | Status |
@@ -203,7 +204,9 @@ class TableRenderer:
         # Column header
         lines.append(self._col_divider(col_widths))
         lines.append(self._col_row(
-            [dim("  Metric"), dim("  Value"), dim("  Status")],
+            [dim(f"  {t('col_metric', default='Metric')}"),
+             dim(f"  {t('col_value', default='Value')}"),
+             dim(f"  {t('col_status', default='Status')}")],
             col_widths,
         ))
         lines.append(self._col_divider(col_widths))

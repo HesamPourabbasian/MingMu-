@@ -19,6 +19,7 @@ import psutil
 
 from mingmu.display.formatters import count, percent, seconds_to_human, temperature
 from mingmu.display.table import MetricRow, Section
+from mingmu.i18n import t
 from mingmu.utils.platform_detect import is_linux, is_macos, is_windows
 from mingmu.utils.thresholds import (
     BATTERY_CHARGE,
@@ -255,17 +256,17 @@ def build_battery_section(info: BatteryInfo | None = None) -> Section:
 
     if not info.present:
         return Section(
-            title="BATTERY",
+            title=t("sec_battery"),
             icon="🔋",
             overall_status=Status.UNKNOWN,
-            rows=[MetricRow("Battery", "Not detected", Status.UNKNOWN)],
+            rows=[MetricRow(t("sec_battery"), t("no_battery"), Status.UNKNOWN)],
         )
 
     rows: list[MetricRow] = []
 
     # Charge level
     charge_status = BATTERY_CHARGE.evaluate(info.charge_percent)
-    rows.append(MetricRow("Charge Level", percent(info.charge_percent), charge_status))
+    rows.append(MetricRow(t("charge_level"), percent(info.charge_percent), charge_status))
 
     # Condition (e.g. Normal, Service Recommended)
     cond_status = Status.GOOD
@@ -273,36 +274,45 @@ def build_battery_section(info: BatteryInfo | None = None) -> Section:
         cond_lower = info.condition.lower()
         if any(term in cond_lower for term in ("normal", "good")):
             cond_status = Status.GOOD
+            cond_display = t("cond_normal", default=info.condition)
         elif any(term in cond_lower for term in ("fair", "check")):
             cond_status = Status.WARNING
+            cond_display = t("cond_fair", default=info.condition)
         else:
             cond_status = Status.CRITICAL
-        rows.append(MetricRow("Condition", info.condition, cond_status))
+            cond_display = t("cond_service", default=info.condition)
+        rows.append(MetricRow(t("condition"), cond_display, cond_status))
 
     # Temperature
     temp_status = BATTERY_TEMPERATURE.evaluate(info.temperature_c)
-    rows.append(MetricRow("Temperature", temperature(info.temperature_c), temp_status))
+    rows.append(MetricRow(t("temperature"), temperature(info.temperature_c), temp_status))
 
     # Power source
     power_status = Status.CHARGING if info.is_charging else Status.INFO
-    rows.append(MetricRow("Power Source", info.power_source, power_status))
+    if info.power_source == "AC Power":
+        ps_display = t("ac_power")
+    elif info.power_source == "Battery":
+        ps_display = t("battery_power")
+    else:
+        ps_display = info.power_source
+    rows.append(MetricRow(t("power_source"), ps_display, power_status))
 
     # Cycle count
     cycle_status = Status.INFO
     if info.cycle_count is not None:
         cycle_status = BATTERY_CYCLE_COUNT.evaluate(info.cycle_count)
-        rows.append(MetricRow("Cycle Count", count(info.cycle_count), cycle_status))
+        rows.append(MetricRow(t("cycle_count"), count(info.cycle_count), cycle_status))
 
     # Battery health / maximum capacity
     if info.health_percent is not None:
         health_threshold = BATTERY_CHARGE  # reuse charge thresholds
         health_status = health_threshold.evaluate(info.health_percent)
-        rows.append(MetricRow("Maximum Capacity", percent(info.health_percent), health_status))
+        rows.append(MetricRow(t("maximum_capacity"), percent(info.health_percent), health_status))
 
     # Time remaining
     if not info.is_charging and info.time_remaining_sec:
         rows.append(MetricRow(
-            "Time Remaining",
+            t("time_remaining"),
             seconds_to_human(info.time_remaining_sec),
             Status.INFO,
         ))
@@ -318,4 +328,4 @@ def build_battery_section(info: BatteryInfo | None = None) -> Section:
     else:
         overall = Status.GOOD
 
-    return Section(title="BATTERY", icon="🔋", overall_status=overall, rows=rows)
+    return Section(title=t("sec_battery"), icon="🔋", overall_status=overall, rows=rows)

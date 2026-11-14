@@ -21,6 +21,7 @@ from mingmu.display.formatters import (
     temperature,
 )
 from mingmu.display.table import MetricRow, Section
+from mingmu.i18n import t
 from mingmu.utils.platform_detect import is_linux, is_macos, is_windows
 from mingmu.utils.thresholds import (
     CPU_LOAD_FACTOR,
@@ -164,32 +165,32 @@ def build_cpu_section(info: CPUInfo | None = None) -> Section:
 
     # Overall usage
     usage_status = CPU_USAGE.evaluate(info.usage_percent)
-    rows.append(MetricRow("Overall Usage", percent(info.usage_percent), usage_status))
+    rows.append(MetricRow(t("overall_usage"), percent(info.usage_percent), usage_status))
 
     # Per-core summary (min / max)
     if info.per_core_usage:
         core_min = min(info.per_core_usage)
         core_max = max(info.per_core_usage)
         rows.append(MetricRow(
-            "Core Range",
+            t("core_range"),
             f"{percent(core_min)} – {percent(core_max)}",
             Status.INFO,
         ))
 
     # Temperature
     temp_status = CPU_TEMPERATURE.evaluate(info.temperature_c)
-    rows.append(MetricRow("Temperature", temperature(info.temperature_c), temp_status))
+    rows.append(MetricRow(t("temperature"), temperature(info.temperature_c), temp_status))
 
     # Frequency
     if info.freq_current_mhz:
         freq_label = frequency(info.freq_current_mhz)
         if info.freq_max_mhz and info.freq_max_mhz > 0:
             freq_label += f" / {frequency(info.freq_max_mhz)}"
-        rows.append(MetricRow("Frequency", freq_label, Status.INFO))
+        rows.append(MetricRow(t("frequency"), freq_label, Status.INFO))
 
     # Core count
     rows.append(MetricRow(
-        "Cores (Phys / Logical)",
+        t("cores_phys_log"),
         f"{count(info.physical_cores)} / {count(info.logical_cores)}",
         Status.INFO,
     ))
@@ -202,9 +203,9 @@ def build_cpu_section(info: CPUInfo | None = None) -> Section:
             f"{load_average(info.load_avg_15)}"
         )
         load_status = CPU_LOAD_FACTOR.evaluate(info.load_factor)
-        rows.append(MetricRow("Load Avg (1 · 5 · 15m)", load_str, load_status))
+        rows.append(MetricRow(t("load_avg"), load_str, load_status))
     elif is_windows():
-        rows.append(MetricRow("Load Avg (1 · 5 · 15m)", "N/A (POSIX only)", Status.INFO))
+        rows.append(MetricRow(t("load_avg"), "N/A (POSIX only)", Status.INFO))
 
     # Top processes
     for name, cpu_pct in info.top_processes:
@@ -227,4 +228,4 @@ def build_cpu_section(info: CPUInfo | None = None) -> Section:
     else:
         overall = Status.GOOD
 
-    return Section(title="CPU", icon="🖥 ", overall_status=overall, rows=rows)
+    return Section(title=t("sec_cpu"), icon="🖥 ", overall_status=overall, rows=rows)

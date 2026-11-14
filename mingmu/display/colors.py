@@ -10,6 +10,7 @@ from __future__ import annotations
 
 from colorama import Fore, Style, init as colorama_init
 
+from mingmu.i18n import t
 from mingmu.utils.thresholds import Status
 
 # Initialise colorama (autoreset so we don't leak colours).
@@ -117,10 +118,11 @@ def status_color(text: str, status: Status) -> str:
 def status_badge(status: Status) -> str:
     """Return a coloured ``● Status`` badge."""
     indicator = _STATUS_INDICATORS.get(status, "○")
-    label = status.value
+    label = t(f"status_{status.value.lower()}", default=status.value)
     return status_color(f"{indicator} {label}", status)
 
 
 def overall_badge(status: Status) -> str:
     """Return a coloured ``[STATUS]`` tag for section headers."""
-    return status_color(f"[{status.value.upper()}]", status)
+    label = t(f"status_{status.value.lower()}", default=status.value).upper()
+    return status_color(f"[{label}]", status)
