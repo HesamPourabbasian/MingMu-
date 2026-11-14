@@ -27,7 +27,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "welcome": "Hello {user}, you are using {model}.",
         "language_menu_title": "SELECT INTERFACE LANGUAGE",
         "language_saved": "Language successfully changed to {lang}.",
-        "nav_hint": "Use ↑ / ↓ to navigate  ·  [Enter] Select  ·  [q] Exit",
+        "nav_hint": "Use W / S to navigate  ·  [Enter] Select  ·  [q] Exit",
 
         # Menu Options
         "menu_opt_1_title": "Full System Overview",
@@ -142,7 +142,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "welcome": "Hola {user}, estás utilizando {model}.",
         "language_menu_title": "SELECCIONAR IDIOMA DE LA INTERFAZ",
         "language_saved": "Idioma cambiado exitosamente a {lang}.",
-        "nav_hint": "Use ↑ / ↓ para navegar  ·  [Enter] Seleccionar  ·  [q] Salir",
+        "nav_hint": "Use W / S para navegar  ·  [Enter] Seleccionar  ·  [q] Salir",
 
         "menu_opt_1_title": "Resumen General del Sistema",
         "menu_opt_1_desc": "Resumen completo de Batería, CPU y RAM",
@@ -249,7 +249,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "welcome": "こんにちは {user} さん、現在 {model} を使用しています。",
         "language_menu_title": "インターフェース言語の選択",
         "language_saved": "言語を {lang} に変更しました。",
-        "nav_hint": "↑ / ↓ キーで移動  ·  [Enter] 選択  ·  [q] 終了",
+        "nav_hint": "W / S キーで移動  ·  [Enter] 選択  ·  [q] 終了",
 
         "menu_opt_1_title": "システム全体概要",
         "menu_opt_1_desc": "バッテリー、CPU、メモリの一括サマリー",
@@ -356,7 +356,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "welcome": "Привет, {user}! Вы используете {model}.",
         "language_menu_title": "ВЫБОР ЯЗЫКА ИНТЕРФЕЙСА",
         "language_saved": "Язык успешно изменен на {lang}.",
-        "nav_hint": "Используйте ↑ / ↓ для навигации  ·  [Enter] Выбор  ·  [q] Выход",
+        "nav_hint": "Используйте W / S для навигации  ·  [Enter] Выбор  ·  [q] Выход",
 
         "menu_opt_1_title": "Полный обзор системы",
         "menu_opt_1_desc": "Сводка батареи, процессора и памяти",
@@ -463,7 +463,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "welcome": "Bonjour {user}, vous utilisez {model}.",
         "language_menu_title": "SÉLECTIONNER LA LANGUE DE L'INTERFACE",
         "language_saved": "Langue changée avec succès vers {lang}.",
-        "nav_hint": "Utilisez ↑ / ↓ pour naviguer  ·  [Enter] Sélectionner  ·  [q] Quitter",
+        "nav_hint": "Utilisez W / S pour naviguer  ·  [Enter] Sélectionner  ·  [q] Quitter",
 
         "menu_opt_1_title": "Vue d'ensemble du système",
         "menu_opt_1_desc": "Résumé global Batterie, CPU et RAM",
@@ -570,7 +570,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "welcome": "Hallo {user}, Sie verwenden {model}.",
         "language_menu_title": "OBERFLÄCHENSPRACHE AUSWÄHLEN",
         "language_saved": "Sprache erfolgreich auf {lang} umgestellt.",
-        "nav_hint": "Nutzen Sie ↑ / ↓ zum Navigieren  ·  [Enter] Auswählen  ·  [q] Beenden",
+        "nav_hint": "Nutzen Sie W / S zum Navigieren  ·  [Enter] Auswählen  ·  [q] Beenden",
 
         "menu_opt_1_title": "Gesamtsystemübersicht",
         "menu_opt_1_desc": "Zusammenfassung von Akku, CPU und RAM",
@@ -677,7 +677,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "welcome": "你好 {user}，你正在使用 {model}。",
         "language_menu_title": "选择界面语言 / SELECT LANGUAGE",
         "language_saved": "界面语言已成功切换为 {lang}。",
-        "nav_hint": "使用 ↑ / ↓ 键导航  ·  按 [Enter] 确认选择  ·  按 [q] 退出",
+        "nav_hint": "使用 W / S 键导航  ·  按 [Enter] 确认选择  ·  按 [q] 退出",
 
         "menu_opt_1_title": "系统综合概览",
         "menu_opt_1_desc": "电池、CPU 与内存综合摘要表格",
@@ -784,7 +784,7 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "welcome": "Merhaba {user}, {model} kullanıyorsunuz.",
         "language_menu_title": "ARAYÜZ DİLİNİ SEÇİN",
         "language_saved": "Dil başarıyla {lang} olarak değiştirildi.",
-        "nav_hint": "Gezinmek için ↑ / ↓ kullanın  ·  [Enter] Seç  ·  [q] Çıkış",
+        "nav_hint": "Gezinmek için W / S kullanın  ·  [Enter] Seç  ·  [q] Çıkış",
 
         "menu_opt_1_title": "Tam Sistem Özeti",
         "menu_opt_1_desc": "Pil, İşlemci ve RAM genel özeti",

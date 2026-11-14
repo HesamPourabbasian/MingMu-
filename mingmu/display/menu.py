@@ -115,7 +115,7 @@ def _select_language_menu(renderer: TableRenderer) -> None:
         print(blue(BOX.bottom_left + BOX.horizontal * inner + BOX.bottom_right))
         print()
 
-        hint = t("nav_hint", default="Use ↑ / ↓ to navigate  ·  [Enter] Select  ·  [q] Exit")
+        hint = t("nav_hint", default="Use W / S to navigate  ·  [Enter] Select  ·  [q] Exit")
         print("  " + bold(cyan("● ")) + dim(hint))
 
         try:
@@ -210,7 +210,7 @@ def show_menu(width: int | None = None) -> None:
         print()
 
         # Keyboard navigation prompt
-        nav_hint = t("nav_hint", default="Use ↑ / ↓ to navigate  ·  [Enter] Select  ·  [q] Exit")
+        nav_hint = t("nav_hint", default="Use W / S to navigate  ·  [Enter] Select  ·  [q] Exit")
         print("  " + bold(cyan("● ")) + dim(nav_hint))
 
         try:

@@ -136,7 +136,7 @@ mingmu
 
 #### Keyboard Navigation Controls
 
-- **Up / Down Arrows (`↑` / `↓`)**, **Vim keys (`k` / `j`)**, or **WASD (`w` / `s`)**: Move the active cursor selection up and down smoothly.
+- **W / S keys**, **Up / Down Arrows (`↑` / `↓`)**, or **Vim keys (`k` / `j`)**: Move the active cursor selection up and down smoothly.
 - **Enter (`↵`)** or **Space**: Activate and open the highlighted view or diagnostic monitor.
 - **Escape** or **`q`**: Exit the application or return from submenus.
 - **Direct Numbers (`0`-`7`)**: Instant shortcut jump directly to the target view.
