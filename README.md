@@ -49,6 +49,8 @@ All metrics are evaluated against deterministic threshold rules and formatted in
 
 ### Display and Usability
 
+- **Full-Width Responsive Layout**: Automatically adapts to full terminal width dynamically, ensuring borders and progress bars scale proportionally to any terminal dimensions.
+- **Personalized Hardware Greeting**: Automatically detects system user accounts and hardware models (e.g., Apple Silicon Mac, Windows PC, Linux machine) to display tailored status headers.
 - **Interactive Main Menu**: Terminal dashboard featuring stylized ASCII branding, numbered shortcuts, and instant help manuals.
 - **Multi-Language Support (i18n)**: Full native localization supporting 8 languages (English, Spanish, Japanese, Russian, French, German, Chinese, Turkish) with runtime switching and persistent configuration.
 - **Advanced Diagnostic Views**: Dedicated expanded inspection screens for deep-dive analysis of individual subsystems.
@@ -132,14 +134,15 @@ Running `mingmu` with no arguments in an interactive terminal session launches t
 mingmu
 ```
 
-The menu provides the following options:
+The menu displays a personalized greeting with the detected system user and hardware model, rendering full-width bordered cards:
 
 - `[1]` **Full System Overview**: Combined table displaying Battery, CPU, and Memory summaries.
 - `[2]` **Advanced Battery Monitor**: Detailed electrical metrics, health condition, voltage, wattage, and hardware identifiers.
 - `[3]` **Advanced CPU Monitor**: Per-core utilization bars, die and core temperatures, load factor, and top processes.
 - `[4]` **Advanced Memory Monitor**: Detailed physical memory classification, swap usage, and heavy memory consumers.
 - `[5]` **Live Watch Dashboard**: Real-time auto-refreshing monitor (press Ctrl+C to return to menu).
-- `[6]` **Help and Documentation**: Built-in reference manual explaining all metrics, status levels, and CLI commands.
+- `[6]` **Language Selection**: Interactive switcher for 8 supported languages with preference saved to disk.
+- `[7]` **Help and Documentation**: Built-in reference manual explaining all metrics, status levels, and CLI commands.
 - `[0]` **Exit**: Close MingMu.
 
 ---
@@ -234,6 +237,10 @@ Language preferences can also be configured interactively via menu option `[6]` 
 #### Automation, Formatting, and Logging
 
 ```bash
+# Specify interface language (en, es, ja, ru, fr, de, zh, tr)
+mingmu --lang es --all
+mingmu -l ja battery
+
 # Export all telemetry as a structured JSON object
 mingmu --json
 
