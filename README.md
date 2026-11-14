@@ -303,6 +303,7 @@ mingmu/
 |   |   `-- table.py            # Box-drawing Unicode table layout engine
 |   |-- i18n/
 |   |   |-- __init__.py         # Internationalization manager, configuration, and t() engine
+|   |   |-- help_translations.py # Localized manual and documentation guides for 8 languages
 |   |   `-- translations.py     # Translation dictionaries for 8 supported languages
 |   `-- utils/
 |       |-- macos_sensors.py    # macOS IOHIDEventSystem thermal and power telemetry

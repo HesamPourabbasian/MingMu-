@@ -15,9 +15,20 @@ from mingmu.display.colors import (
     green,
     magenta,
     red,
+    status_badge,
     yellow,
 )
-from mingmu.display.table import BOX, _pad
+from mingmu.display.table import BOX, _pad, _visible_len
+from mingmu.i18n import get_language
+from mingmu.i18n.help_translations import HELP_DATA
+from mingmu.utils.thresholds import Status
+
+
+def _pad_cell(text: str, width: int) -> str:
+    """Pad *text* to *width* taking into account ANSI escape codes."""
+    vis = _visible_len(text)
+    pad = max(0, width - vis)
+    return text + (" " * pad)
 
 
 def render_help_view(width: int | None = None) -> str:
@@ -31,85 +42,65 @@ def render_help_view(width: int | None = None) -> str:
 
     lines: list[str] = []
 
-    def border_top():
+    def border_top() -> str:
         return blue(BOX.top_left + BOX.horizontal * inner + BOX.top_right)
 
-    def border_mid():
+    def border_mid() -> str:
         return blue(BOX.t_right + BOX.horizontal * inner + BOX.t_left)
 
-    def border_bottom():
+    def border_bottom() -> str:
         return blue(BOX.bottom_left + BOX.horizontal * inner + BOX.bottom_right)
 
-    def row(text: str = "", align: str = "left"):
+    def row(text: str = "", align: str = "left") -> str:
         return blue(BOX.vertical) + _pad(f"  {text}  " if text else "", inner, align) + blue(BOX.vertical)
 
-    def header(title: str):
+    def header(title: str) -> None:
         lines.append(border_mid())
         lines.append(row(bold(cyan(title))))
         lines.append(border_mid())
 
-    # Header
+    # Get active language data
+    lang = get_language()
+    data = HELP_DATA.get(lang, HELP_DATA["en"])
+
+    # Header Card
     lines.append(border_top())
-    lines.append(row(bold(bright_white(f"{__app_name_cn__}  {__app_name__}  ·  HELP & DOCUMENTATION GUIDE")), "center"))
-    lines.append(row(dim(f"v{__version__}  ·  Professional System Health Monitor"), "center"))
+    lines.append(row(bold(bright_white(f"{__app_name_cn__}  {__app_name__}  ·  {data['guide_title']}")), "center"))
+    lines.append(row(dim(f"v{__version__}  ·  {data['guide_subtitle']}"), "center"))
 
     # 1. Overview
-    header("1. ABOUT MINGMU (明眸)")
-    lines.append(row("MingMu (明眸, meaning 'Bright Eyes') is a high-performance system"))
-    lines.append(row("health monitor engineered for macOS, POSIX Linux, and Windows."))
-    lines.append(row("It tracks thermal health, battery condition, processor loads, and"))
-    lines.append(row("memory saturation to diagnose bottlenecks and prevent thermal throttling."))
+    header(data["sec1_title"])
+    for line in data["sec1_lines"]:
+        lines.append(row(line))
 
-    # 2. Status Indicators
-    header("2. STATUS INDICATORS & HEALTH BADGES")
-    lines.append(row(f"{green('● GOOD')}      : Operating well within optimal parameters. No action needed."))
-    lines.append(row(f"{yellow('▲ WARNING')}   : Metric is elevated above typical baseline. Monitor closely."))
-    lines.append(row(f"{red('✖ CRITICAL')}  : Operating near or at hardware limit. Requires immediate attention."))
-    lines.append(row(f"{dim('○ UNKNOWN')}   : Metric unavailable or unreadable by system permissions."))
-    lines.append(row(f"{cyan('ℹ INFO')}      : Informational hardware or runtime attribute."))
+    # 2. Status Indicators & Health Badges
+    header(data["sec2_title"])
+    badge_w = 15
+    lines.append(row(f"{_pad_cell(status_badge(Status.GOOD), badge_w)} : {data['badge_good']}"))
+    lines.append(row(f"{_pad_cell(status_badge(Status.WARNING), badge_w)} : {data['badge_warning']}"))
+    lines.append(row(f"{_pad_cell(status_badge(Status.CRITICAL), badge_w)} : {data['badge_critical']}"))
+    lines.append(row(f"{_pad_cell(status_badge(Status.UNKNOWN), badge_w)} : {data['badge_unknown']}"))
+    lines.append(row(f"{_pad_cell(status_badge(Status.INFO), badge_w)} : {data['badge_info']}"))
 
     # 3. Battery Health & Diagnostics
-    header("3. BATTERY HEALTH & DIAGNOSTICS")
-    lines.append(row(bold("• Health Condition") + " : Sourced from official OS battery management."))
-    lines.append(row("  - 'Normal': Battery operating with healthy chemical capacitance."))
-    lines.append(row("  - 'Service Recommended': Capacity degraded below 80% or cell error."))
-    lines.append(row(bold("• Maximum Capacity") + " : Calibrated ratio of full charge vs design capacity."))
-    lines.append(row("  Healthy batteries generally remain above 80% for 500-1000 charge cycles."))
-    lines.append(row(bold("• Cycle Count") + " : Total discharge cycles accumulated. Most laptop cells"))
-    lines.append(row("  are rated for 1,000 cycles before requiring replacement."))
-    lines.append(row(bold("• Temperature") + " : Monitored via battery gas gauge sensors (IOHID/sysfs)."))
-    lines.append(row("  Healthy range is < 35.0°C. Warning: 35–45°C. Critical: > 45°C."))
+    header(data["sec3_title"])
+    for label, desc in data["sec3_items"]:
+        lines.append(row(bold(f"• {label}") + f" : {desc}"))
 
-    # 4. CPU Metrics & Architecture
-    header("4. CPU & THERMAL METRICS")
-    lines.append(row(bold("• Overall & Per-Core Usage") + " : Real-time active compute utilization."))
-    lines.append(row(bold("• Apple Silicon Thermals") + " : Direct IOHID event monitoring for:"))
-    lines.append(row("  - Performance Cores (pACC): High-frequency compute cores."))
-    lines.append(row("  - Efficiency Cores (eACC): Low-power background compute cores."))
-    lines.append(row("  - SoC Die Temp: Core silicon substrate junction temperature."))
-    lines.append(row(bold("• Load Averages (1m, 5m, 15m)") + " : Average system queue depth."))
-    lines.append(row("  Load Factor = 1m Load / Logical Cores. Factor > 1.0 indicates queued tasks."))
+    # 4. CPU & Thermal Metrics
+    header(data["sec4_title"])
+    for label, desc in data["sec4_items"]:
+        lines.append(row(bold(f"• {label}") + f" : {desc}"))
 
-    # 5. Memory & Swap Saturation
-    header("5. MEMORY (RAM) & SWAP SATURATION")
-    lines.append(row(bold("• Physical Memory") + " : Breakdowns of Used, Available, Free, and Wired."))
-    lines.append(row("  - Wired: OS kernel and critical buffers that cannot be paged to disk."))
-    lines.append(row(bold("• Swap Memory") + " : Virtual memory written to SSD storage when RAM is exhausted."))
-    lines.append(row("  Excessive swap usage (>50%) causes disk thrashing and UI stuttering."))
+    # 5. Memory (RAM) & Swap Saturation
+    header(data["sec5_title"])
+    for label, desc in data["sec5_items"]:
+        lines.append(row(bold(f"• {label}") + f" : {desc}"))
 
-    # 6. Command Line Interface (CLI)
-    header("6. COMMAND-LINE SHORTCUTS & USAGE")
-    lines.append(row(f"{bright_white('mingmu')}                  Open the interactive visual menu."))
-    lines.append(row(f"{bright_white('mingmu --all')}            Print full system overview table."))
-    lines.append(row(f"{bright_white('mingmu battery')}          Display battery metrics table."))
-    lines.append(row(f"{bright_white('mingmu battery -a')}       Display advanced battery breakdown."))
-    lines.append(row(f"{bright_white('mingmu cpu')}              Display CPU metrics table."))
-    lines.append(row(f"{bright_white('mingmu cpu -a')}           Display advanced CPU & per-core table."))
-    lines.append(row(f"{bright_white('mingmu ram')}              Display memory metrics table."))
-    lines.append(row(f"{bright_white('mingmu ram -a')}           Display advanced memory table."))
-    lines.append(row(f"{bright_white('mingmu watch')}            Launch live auto-refresh dashboard."))
-    lines.append(row(f"{bright_white('mingmu --json')}           Export all metrics in clean JSON."))
-    lines.append(row(f"{bright_white('mingmu --no-color')}       Disable ANSI colors for plain logs."))
+    # 6. Command-Line Shortcuts & Usage
+    header(data["sec6_title"])
+    for cmd, desc in data["sec6_items"]:
+        lines.append(row(f"{_pad_cell(bright_white(cmd), 24)} {desc}"))
 
     lines.append(border_bottom())
     return "\n".join(lines)

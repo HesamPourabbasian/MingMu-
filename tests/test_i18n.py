@@ -230,3 +230,60 @@ def test_init_language_hierarchy(tmp_path: Path, monkeypatch: pytest.MonkeyPatch
 
     # Reset
     set_language("en")
+
+
+def test_help_view_localization() -> None:
+    """Test localized rendering of the help & documentation manual."""
+    from mingmu.display.help_view import render_help_view
+
+    # English
+    set_language("en")
+    view_en = render_help_view(width=80)
+    assert "HELP & DOCUMENTATION GUIDE" in view_en
+    assert "STATUS INDICATORS" in view_en
+    assert "COMMAND-LINE SHORTCUTS" in view_en
+
+    # Spanish
+    set_language("es")
+    view_es = render_help_view(width=80)
+    assert "GUÍA DE AYUDA Y DOCUMENTACIÓN" in view_es
+    assert "INDICADORES DE ESTADO" in view_es
+    assert "ATAJOS DE LÍNEA DE COMANDOS" in view_es
+
+    # Japanese
+    set_language("ja")
+    view_ja = render_help_view(width=80)
+    assert "ヘルプ＆ドキュメントガイド" in view_ja
+    assert "ステータスインジケーター" in view_ja
+
+    # Russian
+    set_language("ru")
+    view_ru = render_help_view(width=80)
+    assert "РУКОВОДСТВО ПО ПОМОЩИ И ДОКУМЕНТАЦИЯ" in view_ru
+    assert "ИНДИКАТОРЫ СОСТОЯНИЯ" in view_ru
+
+    # German
+    set_language("de")
+    view_de = render_help_view(width=80)
+    assert "HILFE- & DOKUMENTATIONSHANDBUCH" in view_de
+    assert "STATUSINDIKATOREN" in view_de
+
+    # French
+    set_language("fr")
+    view_fr = render_help_view(width=80)
+    assert "GUIDE D'AIDE ET DE DOCUMENTATION" in view_fr
+    assert "INDICATEURS D'ÉTAT" in view_fr
+
+    # Chinese
+    set_language("zh")
+    view_zh = render_help_view(width=80)
+    assert "帮助与完整技术文档指南" in view_zh
+    assert "状态指示器" in view_zh
+
+    # Turkish
+    set_language("tr")
+    view_tr = render_help_view(width=80)
+    assert "YARDIM VE BELGE KILAVUZU" in view_tr
+    assert "DURUM GÖSTERGELERİ" in view_tr
+
+    set_language("en")
