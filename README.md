@@ -128,11 +128,18 @@ pip install -e .
 
 ### Interactive Menu Mode
 
-Running `mingmu` with no arguments in an interactive terminal session launches the main navigation menu:
+Running `mingmu` with no arguments in an interactive terminal session launches the main navigation menu with full keyboard navigation:
 
 ```bash
 mingmu
 ```
+
+#### Keyboard Navigation Controls
+
+- **Up / Down Arrows (`↑` / `↓`)**, **Vim keys (`k` / `j`)**, or **WASD (`w` / `s`)**: Move the active cursor selection up and down smoothly.
+- **Enter (`↵`)** or **Space**: Activate and open the highlighted view or diagnostic monitor.
+- **Escape** or **`q`**: Exit the application or return from submenus.
+- **Direct Numbers (`0`-`7`)**: Instant shortcut jump directly to the target view.
 
 The menu displays a personalized greeting with the detected system user and hardware model, rendering full-width bordered cards:
 
@@ -306,6 +313,7 @@ mingmu/
 |   |   |-- help_translations.py # Localized manual and documentation guides for 8 languages
 |   |   `-- translations.py     # Translation dictionaries for 8 supported languages
 |   `-- utils/
+|       |-- keyboard.py         # Cross-platform raw keystroke reader and navigation engine
 |       |-- macos_sensors.py    # macOS IOHIDEventSystem thermal and power telemetry
 |       |-- platform_detect.py  # Platform detection for Windows, macOS, and Linux
 |       |-- thresholds.py       # Boundary containers and health classification rules
@@ -316,6 +324,7 @@ mingmu/
     |-- test_collectors.py      # Tests for telemetry collectors and section builders
     |-- test_formatters.py      # Tests for string formatters and byte conversions
     |-- test_i18n.py            # Tests for multi-language translation, fallback, and config
+    |-- test_keyboard.py        # Tests for keyboard navigation and single-keystroke input
     `-- test_platform.py        # Tests for platform detection and Windows support
 ```
 
