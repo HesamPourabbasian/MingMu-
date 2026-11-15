@@ -55,7 +55,7 @@ All metrics are evaluated against deterministic threshold rules and formatted in
 - **Interactive Main Menu**: Terminal dashboard featuring stylized ASCII branding, numbered shortcuts, and instant help manuals.
 - **Multi-Language Support (i18n)**: Full native localization supporting 8 languages (English, Spanish, Japanese, Russian, French, German, Chinese, Turkish) with runtime switching and persistent configuration.
 - **Advanced Diagnostic Views**: Dedicated expanded inspection screens for deep-dive analysis of individual subsystems.
-- **Real-Time Watch Mode**: Continuous auto-refreshing dashboard with configurable sampling intervals.
+- **Real-Time Watch Mode**: Compact dashboard updates changed rows in place to avoid screen flicker, with configurable sampling intervals.
 - **Headless and Pipeline Support**: Full JSON schema export (`--json`) and plain-text logging compatibility (`--no-color`).
 
 ---

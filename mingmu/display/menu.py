@@ -32,6 +32,7 @@ from mingmu.display.colors import (
     yellow,
 )
 from mingmu.display.help_view import render_help_view
+from mingmu.display.live import LiveDisplay, render_live_dashboard
 from mingmu.display.table import BOX, TableRenderer, _pad
 from mingmu.i18n import (
     SUPPORTED_LANGUAGES,
@@ -291,19 +292,18 @@ def show_menu(width: int | None = None) -> None:
 
 
 def _run_interactive_watch(renderer: TableRenderer) -> None:
-    """Run live watch mode from the menu, with graceful return on Ctrl+C."""
+    """Run a compact, low-flicker live dashboard from the menu."""
     interval = 2.0
     try:
-        while True:
-            _clear()
-            sections = [
-                build_battery_section(),
-                build_cpu_section(),
-                build_memory_section(),
-            ]
-            print(renderer.render(sections))
-            print()
-            print(dim(f"  $ watch --interval {interval:g}s  # {t('live_monitoring', interval=interval)}"))
-            time.sleep(interval)
+        with LiveDisplay() as display:
+            while True:
+                sections = [
+                    build_battery_section(),
+                    build_cpu_section(),
+                    build_memory_section(),
+                ]
+                frame = render_live_dashboard(sections, width=renderer.width, interval=interval)
+                display.render(frame)
+                time.sleep(interval)
     except KeyboardInterrupt:
         pass

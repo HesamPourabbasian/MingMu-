@@ -38,7 +38,7 @@ def get_banner(compact: bool = False, width: int | None = None) -> str:
         term_width = width
 
     lines.append("")
-    eyebrow = "mingmu@telemetry:~$ mingmu watch"
+    eyebrow = "github.com/HesamPourabbasian"
     eyebrow_padding = max(0, (term_width - len(eyebrow)) // 2)
     lines.append(" " * eyebrow_padding + magenta(eyebrow))
 

@@ -20,9 +20,7 @@ Usage examples::
 from __future__ import annotations
 
 import json
-import os
 import platform
-import signal
 import sys
 import time
 from typing import Sequence
@@ -40,6 +38,7 @@ from mingmu.core.cpu import build_cpu_section
 from mingmu.core.memory import build_memory_section
 from mingmu.display.colors import disable_colors
 from mingmu.display.help_view import render_help_view
+from mingmu.display.live import LiveDisplay, render_live_dashboard
 from mingmu.display.menu import show_menu
 from mingmu.display.table import Section, TableRenderer
 from mingmu.i18n import SUPPORTED_LANGUAGES, init_language, t
@@ -72,11 +71,6 @@ def _all_sections() -> list[Section]:
         build_cpu_section(),
         build_memory_section(),
     ]
-
-
-def _clear_screen() -> None:
-    """Clear terminal screen (cross-platform)."""
-    os.system("cls" if platform.system() == "Windows" else "clear")
 
 
 def _sections_to_dict(sections: list[Section]) -> dict:
@@ -255,33 +249,36 @@ def watch_cmd(ctx: click.Context, interval: float, max_count: int | None) -> Non
 
     Press Ctrl+C to stop.
     """
-    def _handle_sigint(signum: int, frame: object) -> None:
-        click.echo("\n" + click.style(f"  $ {t('stopped_goodbye')}", fg="cyan"))
-        sys.exit(0)
-
-    signal.signal(signal.SIGINT, _handle_sigint)
-
     iteration = 0
-    while True:
-        _clear_screen()
-        sections = _all_sections()
-
+    try:
         if ctx.obj.get("as_json"):
-            data = _sections_to_dict(sections)
-            data["watch"] = {"iteration": iteration, "interval": interval}
-            click.echo(json.dumps(data, indent=2))
+            while True:
+                sections = _all_sections()
+                data = _sections_to_dict(sections)
+                data["watch"] = {"iteration": iteration, "interval": interval}
+                click.echo(json.dumps(data, indent=2))
+
+                iteration += 1
+                if max_count is not None and iteration >= max_count:
+                    break
+                time.sleep(interval)
         else:
-            table = _render_sections(sections, ctx.obj.get("width"))
-            click.echo(table)
-            click.echo()
-            from mingmu.display.colors import dim as dim_text
-            click.echo(dim_text(f"  $ watch --interval {interval:g}s  # {t('live_monitoring', interval=interval)}"))
+            with LiveDisplay() as display:
+                while True:
+                    sections = _all_sections()
+                    frame = render_live_dashboard(
+                        sections,
+                        width=ctx.obj.get("width"),
+                        interval=interval,
+                    )
+                    display.render(frame)
 
-        iteration += 1
-        if max_count is not None and iteration >= max_count:
-            break
-
-        time.sleep(interval)
+                    iteration += 1
+                    if max_count is not None and iteration >= max_count:
+                        break
+                    time.sleep(interval)
+    except KeyboardInterrupt:
+        click.echo("\n" + click.style(f"  $ {t('stopped_goodbye')}", fg="cyan"))
 
 
 # ── Default overview command ─────────────────────────────────

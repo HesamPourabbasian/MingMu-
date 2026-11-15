@@ -45,9 +45,9 @@ def read_key() -> str:
             line = sys.stdin.readline().strip().lower()
             if not line:
                 return "quit"
-            if line in ("up", "u", "k", "w"):
+            if line in ("up", "u", "k", "w", "\x1b[a", "\x1boa"):
                 return "up"
-            if line in ("down", "d", "j", "s"):
+            if line in ("down", "d", "j", "s", "\x1b[b", "\x1bob"):
                 return "down"
             if line in ("enter", "return", "ok"):
                 return "enter"
@@ -113,6 +113,16 @@ def _read_windows_key() -> str:
     return ch.lower()
 
 
+def _read_posix_char(fd: int) -> str:
+    """Read one key without allowing TextIOWrapper to buffer arrow bytes."""
+    reader = sys.stdin.read
+    if getattr(reader, "__self__", None) is sys.stdin:
+        encoding = getattr(sys.stdin, "encoding", None) or "utf-8"
+        return os.read(fd, 1).decode(encoding, errors="replace")
+    # Keep custom file-like streams usable for embedded callers and tests.
+    return reader(1)
+
+
 def _read_posix_key() -> str:
     """Read single keystroke on POSIX (macOS, Linux) using termios & tty."""
     import select
@@ -123,39 +133,40 @@ def _read_posix_key() -> str:
     old_settings = termios.tcgetattr(fd)
     try:
         tty.setraw(fd)
-        ch = sys.stdin.read(1)
+        ch = _read_posix_char(fd)
 
         if ch == "\x03":  # Ctrl+C
             raise KeyboardInterrupt
 
         if ch == "\x1b":
-            # Check if there are trailing chars in escape sequence
-            r, _, _ = select.select([sys.stdin], [], [], 0.05)
-            if r:
-                ch2 = sys.stdin.read(1)
-                if ch2 in ("[", "O"):
-                    ch3 = sys.stdin.read(1)
-                    if ch3 == "A":
-                        return "up"
-                    elif ch3 == "B":
-                        return "down"
-                    elif ch3 == "C":
-                        return "right"
-                    elif ch3 == "D":
-                        return "left"
-                    elif ch3 == "H":  # Home
-                        return "home"
-                    elif ch3 == "F":  # End
-                        return "end"
-                    elif ch3 in ("1", "2", "3", "4", "5", "6", "7", "8"):
-                        # Extended escape (e.g. \x1b[3~ for Delete)
-                        select.select([sys.stdin], [], [], 0.01)
-                        try:
-                            sys.stdin.read(1)
-                        except Exception:
-                            pass
-                        return "other"
-            return "escape"
+            # Collect the whole CSI/SS3 sequence. Some macOS terminals send
+            # escape bytes separately, and modified arrows contain parameters
+            # between the introducer and the final direction byte.
+            r, _, _ = select.select([fd], [], [], 0.2)
+            if not r:
+                return "escape"
+
+            sequence = _read_posix_char(fd)
+            if sequence not in ("[", "O"):
+                return "escape"
+
+            final = ""
+            for _ in range(15):
+                r, _, _ = select.select([fd], [], [], 0.1)
+                if not r:
+                    break
+                final = _read_posix_char(fd)
+                if final in "ABCDHF~":
+                    break
+
+            return {
+                "A": "up",
+                "B": "down",
+                "C": "right",
+                "D": "left",
+                "H": "home",
+                "F": "end",
+            }.get(final, "other")
 
         if ch in ("\r", "\n"):
             return "enter"
