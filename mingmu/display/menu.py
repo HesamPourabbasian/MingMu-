@@ -83,7 +83,7 @@ def _select_language_menu(renderer: TableRenderer) -> None:
 
     while True:
         _clear()
-        print(blue(BOX.top_left + BOX.horizontal * inner + BOX.top_right))
+        print(cyan(BOX.top_left + BOX.horizontal * inner + BOX.top_right))
         title = bold(bright_white(f"  🌐  {t('language_menu_title')}"))
         print(blue(BOX.vertical) + _pad(title, inner) + blue(BOX.vertical))
         print(blue(BOX.t_right + BOX.horizontal * inner + BOX.t_left))
@@ -95,7 +95,7 @@ def _select_language_menu(renderer: TableRenderer) -> None:
 
             if is_active:
                 cursor = cyan(bold(" ▶ "))
-                key_tag = cyan(bold(num_tag))
+                key_tag = magenta(bold(num_tag))
                 if code == "0":
                     label = bold(bright_white(nat_name))
                 else:
@@ -112,11 +112,11 @@ def _select_language_menu(renderer: TableRenderer) -> None:
 
             print(blue(BOX.vertical) + _pad(line, inner) + blue(BOX.vertical))
 
-        print(blue(BOX.bottom_left + BOX.horizontal * inner + BOX.bottom_right))
+        print(cyan(BOX.bottom_left + BOX.horizontal * inner + BOX.bottom_right))
         print()
 
         hint = t("nav_hint", default="Use W / S to navigate  ·  [Enter] Select  ·  [q] Exit")
-        print("  " + bold(cyan("● ")) + dim(hint))
+        print("  " + bold(magenta("◆ ")) + dim(hint))
 
         try:
             key = read_key()
@@ -183,7 +183,7 @@ def show_menu(width: int | None = None) -> None:
         # Draw menu card using full width
         card_width = renderer.width
         inner = card_width - 2
-        print(blue(BOX.top_left + BOX.horizontal * inner + BOX.top_right))
+        print(cyan(BOX.top_left + BOX.horizontal * inner + BOX.top_right))
         menu_title = bold(bright_white(f"  🧭  {t('select_view')}"))
         print(blue(BOX.vertical) + _pad(menu_title, inner) + blue(BOX.vertical))
         print(blue(BOX.t_right + BOX.horizontal * inner + BOX.t_left))
@@ -194,7 +194,7 @@ def show_menu(width: int | None = None) -> None:
             desc_clipped = desc if len(desc) <= max_desc_w else desc[:max_desc_w - 1] + "…"
             if is_active:
                 cursor = cyan(bold(" ▶ "))
-                key_tag = cyan(bold(f"[{key}]"))
+                key_tag = magenta(bold(f"[{key}]"))
                 title_tag = bold(bright_white(f"{icon} {title:<26}"))
                 desc_tag = cyan(f"· {desc_clipped}")
                 line = f" {cursor}{key_tag} {title_tag} {desc_tag}"
@@ -206,12 +206,12 @@ def show_menu(width: int | None = None) -> None:
                 line = f" {cursor}{key_tag} {title_tag} {desc_tag}"
             print(blue(BOX.vertical) + _pad(line, inner) + blue(BOX.vertical))
 
-        print(blue(BOX.bottom_left + BOX.horizontal * inner + BOX.bottom_right))
+        print(cyan(BOX.bottom_left + BOX.horizontal * inner + BOX.bottom_right))
         print()
 
         # Keyboard navigation prompt
         nav_hint = t("nav_hint", default="Use W / S to navigate  ·  [Enter] Select  ·  [q] Exit")
-        print("  " + bold(cyan("● ")) + dim(nav_hint))
+        print("  " + bold(magenta("◆ ")) + dim(nav_hint))
 
         try:
             key = read_key()

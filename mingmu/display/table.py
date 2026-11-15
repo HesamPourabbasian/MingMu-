@@ -20,6 +20,7 @@ from mingmu.display.colors import (
     bright_white,
     cyan,
     dim,
+    magenta,
     overall_badge,
     status_badge,
 )
@@ -120,10 +121,10 @@ class TableRenderer:
     # ── Border lines ──
 
     def _top_border(self) -> str:
-        return blue(BOX.top_left + BOX.horizontal * self.inner + BOX.top_right)
+        return cyan(BOX.top_left + BOX.horizontal * self.inner + BOX.top_right)
 
     def _bottom_border(self) -> str:
-        return blue(BOX.bottom_left + BOX.horizontal * self.inner + BOX.bottom_right)
+        return cyan(BOX.bottom_left + BOX.horizontal * self.inner + BOX.bottom_right)
 
     def _divider(self) -> str:
         return blue(BOX.t_right + BOX.horizontal * self.inner + BOX.t_left)
@@ -132,7 +133,7 @@ class TableRenderer:
         segments = BOX.horizontal * col_widths[0]
         for w in col_widths[1:]:
             segments += BOX.cross + BOX.horizontal * w
-        return blue(BOX.t_right + segments + BOX.t_left)
+        return magenta(BOX.t_right + segments + BOX.t_left)
 
     def _row(self, content: str, align: str = "center") -> str:
         """A full-width content row."""
@@ -159,7 +160,7 @@ class TableRenderer:
 
         # ── Header ──
         lines.append(self._top_border())
-        title = bold(cyan(f"{__app_name_cn__}  {__app_name__}"))
+        title = bold(cyan(f"◆ {__app_name_cn__}  {__app_name__} ◆"))
         subtitle = dim(f"v{__version__}  ·  {pinfo.system} {pinfo.machine}")
         lines.append(self._row(f"  {title}  "))
         lines.append(self._row(f"  {subtitle}  "))
@@ -183,7 +184,7 @@ class TableRenderer:
         """Render one metric section (header + data rows)."""
         # Section header
         badge = overall_badge(section.overall_status)
-        header_text = bold(bright_white(f"  {section.icon}  {section.title}"))
+        header_text = f"  {magenta(section.icon)}  {bold(bright_white(section.title))}"
         # Calculate padding so badge is right-aligned
         header_visible_len = _visible_len(header_text) + _visible_len(badge) + 4
         gap = max(1, self.inner - header_visible_len)

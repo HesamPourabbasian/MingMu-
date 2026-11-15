@@ -47,27 +47,27 @@ def _paint(text: str, color: str) -> str:
 
 
 def green(text: str) -> str:
-    return _paint(text, Fore.GREEN)
+    return _paint(text, Fore.LIGHTGREEN_EX)
 
 
 def yellow(text: str) -> str:
-    return _paint(text, Fore.YELLOW)
+    return _paint(text, Fore.LIGHTYELLOW_EX)
 
 
 def red(text: str) -> str:
-    return _paint(text, Fore.RED)
+    return _paint(text, Fore.LIGHTRED_EX)
 
 
 def cyan(text: str) -> str:
-    return _paint(text, Fore.CYAN)
+    return _paint(text, Fore.LIGHTCYAN_EX)
 
 
 def blue(text: str) -> str:
-    return _paint(text, Fore.BLUE)
+    return _paint(text, Fore.LIGHTBLUE_EX)
 
 
 def magenta(text: str) -> str:
-    return _paint(text, Fore.MAGENTA)
+    return _paint(text, Fore.LIGHTMAGENTA_EX)
 
 
 def white(text: str) -> str:

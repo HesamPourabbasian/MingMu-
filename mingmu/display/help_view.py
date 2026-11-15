@@ -43,20 +43,20 @@ def render_help_view(width: int | None = None) -> str:
     lines: list[str] = []
 
     def border_top() -> str:
-        return blue(BOX.top_left + BOX.horizontal * inner + BOX.top_right)
+        return cyan(BOX.top_left + BOX.horizontal * inner + BOX.top_right)
 
     def border_mid() -> str:
-        return blue(BOX.t_right + BOX.horizontal * inner + BOX.t_left)
+        return magenta(BOX.t_right + BOX.horizontal * inner + BOX.t_left)
 
     def border_bottom() -> str:
-        return blue(BOX.bottom_left + BOX.horizontal * inner + BOX.bottom_right)
+        return cyan(BOX.bottom_left + BOX.horizontal * inner + BOX.bottom_right)
 
     def row(text: str = "", align: str = "left") -> str:
         return blue(BOX.vertical) + _pad(f"  {text}  " if text else "", inner, align) + blue(BOX.vertical)
 
     def header(title: str) -> None:
         lines.append(border_mid())
-        lines.append(row(bold(cyan(title))))
+        lines.append(row(bold(magenta(title))))
         lines.append(border_mid())
 
     # Get active language data

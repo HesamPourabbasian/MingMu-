@@ -49,6 +49,7 @@ All metrics are evaluated against deterministic threshold rules and formatted in
 
 ### Display and Usability
 
+- **Cyberpunk-Inspired Terminal Theme**: Electric cyan and blue framing, magenta telemetry accents, and brighter health indicators create a high-contrast neon dashboard.
 - **Full-Width Responsive Layout**: Automatically adapts to full terminal width dynamically, ensuring borders and progress bars scale proportionally to any terminal dimensions.
 - **Personalized Hardware Greeting**: Automatically detects system user accounts and hardware models (e.g., Apple Silicon Mac, Windows PC, Linux machine) to display tailored status headers.
 - **Interactive Main Menu**: Terminal dashboard featuring stylized ASCII branding, numbered shortcuts, and instant help manuals.
