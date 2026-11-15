@@ -169,6 +169,12 @@ class WindowsGPUReadings(NamedTuple):
     adapter_ram_bytes: int | None
     resolution: str | None
     status: str | None
+    refresh_rate: int | None = None
+    bits_per_pixel: int | None = None
+    video_processor: str | None = None
+    driver_date: str | None = None
+    pnp_id: str | None = None
+    usage_percent: float | None = None
 
 
 def get_windows_gpu_readings() -> list[WindowsGPUReadings]:
@@ -177,6 +183,14 @@ def get_windows_gpu_readings() -> list[WindowsGPUReadings]:
     $res = @()
     try {
         $gpus = Get-CimInstance Win32_VideoController -ErrorAction SilentlyContinue
+        $gpuUtil = $null
+        try {
+            $perf = Get-CimInstance Win32_PerfFormattedData_GPUPerformanceCounters_GPUEngine -ErrorAction SilentlyContinue | Measure-Object -Property UtilizationPercentage -Sum
+            if ($perf -and $perf.Sum -ge 0) {
+                $gpuUtil = [math]::Round([double]$perf.Sum, 1)
+            }
+        } catch {}
+
         foreach ($g in $gpus) {
             $h = $g.CurrentHorizontalResolution
             $v = $g.CurrentVerticalResolution
@@ -186,12 +200,18 @@ def get_windows_gpu_readings() -> list[WindowsGPUReadings]:
                 AdapterRAM = $g.AdapterRAM
                 Resolution = if ($h -and $v) { "$h x $v" } else { $null }
                 Status = $g.Status
+                RefreshRate = $g.CurrentRefreshRate
+                BitsPerPixel = $g.CurrentBitsPerPixel
+                VideoProcessor = $g.VideoProcessor
+                DriverDate = $g.DriverDate
+                PNPDeviceID = $g.PNPDeviceID
+                UsagePercent = $gpuUtil
             }
         }
     } catch {}
     $res
     """
-    raw = _run_powershell_json(script, timeout=3.0)
+    raw = _run_powershell_json(script, timeout=3.5)
     results: list[WindowsGPUReadings] = []
     if isinstance(raw, dict):
         raw = [raw]
@@ -199,11 +219,20 @@ def get_windows_gpu_readings() -> list[WindowsGPUReadings]:
         for item in raw:
             if isinstance(item, dict) and item.get("Name"):
                 ram = item.get("AdapterRAM")
+                rf = item.get("RefreshRate")
+                bpp = item.get("BitsPerPixel")
+                u = item.get("UsagePercent")
                 results.append(WindowsGPUReadings(
                     name=str(item.get("Name")).strip(),
                     driver_version=str(item.get("DriverVersion")).strip() if item.get("DriverVersion") else None,
                     adapter_ram_bytes=int(ram) if isinstance(ram, (int, float)) and ram > 0 else None,
                     resolution=str(item.get("Resolution")).strip() if item.get("Resolution") else None,
                     status=str(item.get("Status")).strip() if item.get("Status") else None,
+                    refresh_rate=int(rf) if isinstance(rf, (int, float)) and rf > 0 else None,
+                    bits_per_pixel=int(bpp) if isinstance(bpp, (int, float)) and bpp > 0 else None,
+                    video_processor=str(item.get("VideoProcessor")).strip() if item.get("VideoProcessor") else None,
+                    driver_date=str(item.get("DriverDate")).split(".")[0] if item.get("DriverDate") else None,
+                    pnp_id=str(item.get("PNPDeviceID")).strip() if item.get("PNPDeviceID") else None,
+                    usage_percent=float(u) if isinstance(u, (int, float)) and 0 <= u <= 100 else None,
                 ))
     return results

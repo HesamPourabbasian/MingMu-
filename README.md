@@ -42,13 +42,18 @@ All metrics are evaluated against deterministic threshold rules and formatted in
   - Identification of top CPU-consuming processes (PID, Name, CPU %, Memory %).
 
 - **Graphics Card (GPU) & Display Telemetry**:
-  - GPU model identification, vendor classification, and driver version.
-  - Compute core counts (Apple Silicon GPU Cores, NVIDIA CUDA cores / Stream processors).
-  - Real-time GPU compute utilization with dynamic visual progress gauges.
+  - Primary and secondary multi-GPU detection (discrete GPUs, integrated chips, eGPUs).
+  - Compute core counts (Apple Silicon GPU cores, NVIDIA CUDA / Tensor cores, AMD Stream processors).
+  - Real-time compute utilization alongside dedicated 3D Renderer and 2D/Geometry Tiler engine metrics.
+  - Active core and memory hardware clock frequencies (MHz).
+  - Power consumption telemetry tracking active wattage draw (W) and board power limits.
   - Thermal monitoring via dedicated GPU die sensors (`GPU MTR Temp Sensors` on Apple Silicon, NVIDIA SMI, and DRM sysfs).
-  - Video Memory (VRAM): Dedicated VRAM capacity and live consumption, or Apple Silicon SoC Unified Memory architecture detection.
-  - Graphics API compatibility (Metal 3/4, DirectX 12 Ultimate, Vulkan).
-  - Connected display resolution and display mode enumeration (e.g. 2560x1600 Retina, 4K UHD).
+  - Fan speed percentage and cooling mode detection.
+  - Driver health tracking with recovery and crash-reset counters (`recoveryCount`).
+  - Video Memory (VRAM): Dedicated VRAM allocation and free space, or Apple Silicon SoC Dynamic Shared Memory architecture with active in-use vs. allocated buffers.
+  - Graphics API compatibility (Metal 3/4, DirectX 12 Ultimate, Vulkan 1.3, CUDA).
+  - Connected display resolution, refresh rate, and color bit-depth enumeration (e.g. 2560x1600 Retina, 165Hz HDR).
+  - Enumeration of active GPU compute tasks and compositor processes (PID, Name, Memory Footprint).
 
 - **Memory and Swap Saturation**:
   - Physical RAM breakdown: Total, Used, Available, Free, Active, Inactive, and Wired (Kernel) memory.
