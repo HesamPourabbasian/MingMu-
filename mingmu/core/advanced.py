@@ -44,7 +44,7 @@ def build_advanced_battery_section() -> Section:
     if not info.present:
         return Section(
             title=t("sec_adv_battery"),
-            icon="🔋",
+            icon="BAT",
             overall_status=Status.UNKNOWN,
             rows=[MetricRow(t("col_status"), t("no_battery"), Status.UNKNOWN)],
         )
@@ -149,7 +149,7 @@ def build_advanced_battery_section() -> Section:
 
     return Section(
         title=t("sec_adv_battery"),
-        icon="🔋",
+        icon="BAT",
         overall_status=overall,
         rows=rows,
     )
@@ -237,7 +237,7 @@ def build_advanced_cpu_section() -> Section:
                 continue
         top_procs.sort(key=lambda x: x[2], reverse=True)
         for pid, name, c_pct, m_pct in top_procs[:4]:
-            rows.append(MetricRow(f"  ⚡ PID {pid:<5} {name}", f"CPU: {c_pct:.1f}% · RAM: {m_pct:.1f}%", Status.INFO))
+            rows.append(MetricRow(f"  cpu> PID {pid:<5} {name}", f"CPU: {c_pct:.1f}% · RAM: {m_pct:.1f}%", Status.INFO))
     except Exception as exc:
         log.debug("Top CPU processes error: %s", exc)
 
@@ -251,7 +251,7 @@ def build_advanced_cpu_section() -> Section:
 
     return Section(
         title=t("sec_adv_cpu"),
-        icon="🖥 ",
+        icon="CPU",
         overall_status=overall,
         rows=rows,
     )
@@ -314,7 +314,7 @@ def build_advanced_memory_section() -> Section:
                 continue
         top_procs.sort(key=lambda x: x[2], reverse=True)
         for pid, name, m_pct, rss in top_procs[:4]:
-            rows.append(MetricRow(f"  💾 PID {pid:<5} {name}", f"{m_pct:.1f}% ({bytes_to_human(rss)})", Status.INFO))
+            rows.append(MetricRow(f"  mem> PID {pid:<5} {name}", f"{m_pct:.1f}% ({bytes_to_human(rss)})", Status.INFO))
     except Exception as exc:
         log.debug("Top memory processes error: %s", exc)
 
@@ -328,7 +328,7 @@ def build_advanced_memory_section() -> Section:
 
     return Section(
         title=t("sec_adv_memory"),
-        icon="💾",
+        icon="RAM",
         overall_status=overall,
         rows=rows,
     )

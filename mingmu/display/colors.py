@@ -98,14 +98,14 @@ _STATUS_COLORS: dict[Status, callable] = {
     Status.CHARGING: cyan,
 }
 
-# Map status → dot indicator
+# Map status to an ASCII indicator
 _STATUS_INDICATORS: dict[Status, str] = {
-    Status.GOOD: "●",
-    Status.WARNING: "▲",
-    Status.CRITICAL: "✖",
-    Status.UNKNOWN: "○",
-    Status.INFO: "ℹ",
-    Status.CHARGING: "⚡",
+    Status.GOOD: "[+]",
+    Status.WARNING: "[!]",
+    Status.CRITICAL: "[X]",
+    Status.UNKNOWN: "[?]",
+    Status.INFO: "[i]",
+    Status.CHARGING: "[AC]",
 }
 
 
@@ -116,8 +116,8 @@ def status_color(text: str, status: Status) -> str:
 
 
 def status_badge(status: Status) -> str:
-    """Return a coloured ``● Status`` badge."""
-    indicator = _STATUS_INDICATORS.get(status, "○")
+    """Return a coloured shell-style status badge."""
+    indicator = _STATUS_INDICATORS.get(status, "[?]")
     label = t(f"status_{status.value.lower()}", default=status.value)
     return status_color(f"{indicator} {label}", status)
 

@@ -170,7 +170,7 @@ def main(
     if not is_supported():
         click.echo(
             click.style(
-                f"⚠  MingMu supports macOS, Linux, and Windows only. Detected: {platform.system()}",
+                f"WARNING: MingMu supports macOS, Linux, and Windows only. Detected: {platform.system()}",
                 fg="red",
             ),
             err=True,
@@ -256,7 +256,7 @@ def watch_cmd(ctx: click.Context, interval: float, max_count: int | None) -> Non
     Press Ctrl+C to stop.
     """
     def _handle_sigint(signum: int, frame: object) -> None:
-        click.echo("\n" + click.style(f"  {t('stopped_goodbye')} 👋", fg="cyan"))
+        click.echo("\n" + click.style(f"  $ {t('stopped_goodbye')}", fg="cyan"))
         sys.exit(0)
 
     signal.signal(signal.SIGINT, _handle_sigint)
@@ -275,7 +275,7 @@ def watch_cmd(ctx: click.Context, interval: float, max_count: int | None) -> Non
             click.echo(table)
             click.echo()
             from mingmu.display.colors import dim as dim_text
-            click.echo(dim_text(f"  ↻  {t('live_monitoring', interval=interval)}"))
+            click.echo(dim_text(f"  $ watch --interval {interval:g}s  # {t('live_monitoring', interval=interval)}"))
 
         iteration += 1
         if max_count is not None and iteration >= max_count:

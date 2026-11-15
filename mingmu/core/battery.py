@@ -257,7 +257,7 @@ def build_battery_section(info: BatteryInfo | None = None) -> Section:
     if not info.present:
         return Section(
             title=t("sec_battery"),
-            icon="🔋",
+            icon="BAT",
             overall_status=Status.UNKNOWN,
             rows=[MetricRow(t("sec_battery"), t("no_battery"), Status.UNKNOWN)],
         )
@@ -328,4 +328,4 @@ def build_battery_section(info: BatteryInfo | None = None) -> Section:
     else:
         overall = Status.GOOD
 
-    return Section(title=t("sec_battery"), icon="🔋", overall_status=overall, rows=rows)
+    return Section(title=t("sec_battery"), icon="BAT", overall_status=overall, rows=rows)

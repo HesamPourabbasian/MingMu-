@@ -160,7 +160,7 @@ class TableRenderer:
 
         # ── Header ──
         lines.append(self._top_border())
-        title = bold(cyan(f"◆ {__app_name_cn__}  {__app_name__} ◆"))
+        title = bold(cyan(f"$ {__app_name_cn__}  {__app_name__}"))
         subtitle = dim(f"v{__version__}  ·  {pinfo.system} {pinfo.machine}")
         lines.append(self._row(f"  {title}  "))
         lines.append(self._row(f"  {subtitle}  "))

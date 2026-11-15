@@ -228,4 +228,4 @@ def build_cpu_section(info: CPUInfo | None = None) -> Section:
     else:
         overall = Status.GOOD
 
-    return Section(title=t("sec_cpu"), icon="🖥 ", overall_status=overall, rows=rows)
+    return Section(title=t("sec_cpu"), icon="CPU", overall_status=overall, rows=rows)

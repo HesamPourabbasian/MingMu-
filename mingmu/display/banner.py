@@ -38,7 +38,7 @@ def get_banner(compact: bool = False, width: int | None = None) -> str:
         term_width = width
 
     lines.append("")
-    eyebrow = "◆  M I N G M U  //  SYSTEM TELEMETRY  ◆"
+    eyebrow = "mingmu@telemetry:~$ mingmu watch"
     eyebrow_padding = max(0, (term_width - len(eyebrow)) // 2)
     lines.append(" " * eyebrow_padding + magenta(eyebrow))
 
@@ -49,7 +49,7 @@ def get_banner(compact: bool = False, width: int | None = None) -> str:
         lines.append(" " * padding + bold(color_func(line)))
 
     rail_width = min(64, max(12, term_width - 8))
-    rail = "╶" + "─" * (rail_width - 2) + "╴"
+    rail = "+" + "-" * (rail_width - 2) + "+"
     lines.append(" " * max(0, (term_width - rail_width) // 2) + cyan(rail))
 
     # Sub-header with Chinese characters and tagline
@@ -60,7 +60,7 @@ def get_banner(compact: bool = False, width: int | None = None) -> str:
     padding_sub = max(0, (term_width - len(clean_sub)) // 2)
     lines.append(" " * padding_sub + cyan(sub))
 
-    telemetry = "◈  CROSS-PLATFORM MONITORING  ·  LIVE DIAGNOSTICS  ◈"
+    telemetry = "# sensors: battery | cpu | memory"
     padding_telemetry = max(0, (term_width - len(telemetry)) // 2)
     lines.append(" " * padding_telemetry + magenta(telemetry))
 

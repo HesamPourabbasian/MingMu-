@@ -52,7 +52,7 @@ def _clear() -> None:
 def _pause() -> None:
     """Wait for user to press Enter before returning to menu."""
     print()
-    print(dim(f"  ↵ {t('press_enter')}"))
+    print(dim(f"  $ {t('press_enter')}"))
     try:
         read_key()
     except (EOFError, KeyboardInterrupt):
@@ -84,17 +84,17 @@ def _select_language_menu(renderer: TableRenderer) -> None:
     while True:
         _clear()
         print(cyan(BOX.top_left + BOX.horizontal * inner + BOX.top_right))
-        title = bold(bright_white(f"  🌐  {t('language_menu_title')}"))
+        title = bold(bright_white(f"  $ {t('language_menu_title')}"))
         print(blue(BOX.vertical) + _pad(title, inner) + blue(BOX.vertical))
         print(blue(BOX.t_right + BOX.horizontal * inner + BOX.t_left))
 
         for idx, (code, nat_name, eng_name) in enumerate(items):
             is_active = (idx == selected_idx)
-            is_current = "  ● (active)" if code == current_code else ""
+            is_current = "  [ACTIVE]" if code == current_code else ""
             num_tag = f"[{idx + 1 if idx < len(lang_list) else 0}]"
 
             if is_active:
-                cursor = cyan(bold(" ▶ "))
+                cursor = cyan(bold(" > "))
                 key_tag = magenta(bold(num_tag))
                 if code == "0":
                     label = bold(bright_white(nat_name))
@@ -116,7 +116,7 @@ def _select_language_menu(renderer: TableRenderer) -> None:
         print()
 
         hint = t("nav_hint", default="Use W / S to navigate  ·  [Enter] Select  ·  [q] Exit")
-        print("  " + bold(magenta("◆ ")) + dim(hint))
+        print("  " + bold(magenta("$ ")) + dim(hint))
 
         try:
             key = read_key()
@@ -134,7 +134,7 @@ def _select_language_menu(renderer: TableRenderer) -> None:
             if chosen_code != "0":
                 set_language(chosen_code)
                 save_language_preference(chosen_code)
-                print(green(f"\n  ✓ {t('language_saved', lang=nat_name)}"))
+                print(green(f"\n  [OK] {t('language_saved', lang=nat_name)}"))
                 time.sleep(1.0)
             return
         elif key.isdigit():
@@ -145,7 +145,7 @@ def _select_language_menu(renderer: TableRenderer) -> None:
                 chosen_code, nat_name, _ = items[val - 1]
                 set_language(chosen_code)
                 save_language_preference(chosen_code)
-                print(green(f"\n  ✓ {t('language_saved', lang=nat_name)}"))
+                print(green(f"\n  [OK] {t('language_saved', lang=nat_name)}"))
                 time.sleep(1.0)
                 return
 
@@ -162,19 +162,19 @@ def show_menu(width: int | None = None) -> None:
 
         # Personalized user & device welcome message
         user_info = get_user_device_info()
-        print("  " + bold(cyan("● ")) + bold(bright_white(user_info.welcome_message())))
+        print("  " + bold(cyan("$ ")) + bold(bright_white(user_info.welcome_message())))
         print()
 
         # Menu options list
         menu_items = [
-            ("1", "📊", t("menu_opt_1_title"), t("menu_opt_1_desc")),
-            ("2", "🔋", t("menu_opt_2_title"), t("menu_opt_2_desc")),
-            ("3", "🖥 ", t("menu_opt_3_title"), t("menu_opt_3_desc")),
-            ("4", "💾", t("menu_opt_4_title"), t("menu_opt_4_desc")),
-            ("5", "⏱ ", t("menu_opt_5_title"), t("menu_opt_5_desc")),
-            ("6", "🌐", t("menu_opt_6_title"), t("menu_opt_6_desc")),
-            ("7", "❓", t("menu_opt_7_title"), t("menu_opt_7_desc")),
-            ("0", "🚪", t("menu_opt_0_title"), t("menu_opt_0_desc")),
+            ("1", "[SYS]", t("menu_opt_1_title"), t("menu_opt_1_desc")),
+            ("2", "[BAT]", t("menu_opt_2_title"), t("menu_opt_2_desc")),
+            ("3", "[CPU]", t("menu_opt_3_title"), t("menu_opt_3_desc")),
+            ("4", "[RAM]", t("menu_opt_4_title"), t("menu_opt_4_desc")),
+            ("5", "[LIVE]", t("menu_opt_5_title"), t("menu_opt_5_desc")),
+            ("6", "[LANG]", t("menu_opt_6_title"), t("menu_opt_6_desc")),
+            ("7", "[HELP]", t("menu_opt_7_title"), t("menu_opt_7_desc")),
+            ("0", "[EXIT]", t("menu_opt_0_title"), t("menu_opt_0_desc")),
         ]
 
         if selected_idx >= len(menu_items):
@@ -184,24 +184,24 @@ def show_menu(width: int | None = None) -> None:
         card_width = renderer.width
         inner = card_width - 2
         print(cyan(BOX.top_left + BOX.horizontal * inner + BOX.top_right))
-        menu_title = bold(bright_white(f"  🧭  {t('select_view')}"))
+        menu_title = bold(bright_white(f"  $ {t('select_view')}"))
         print(blue(BOX.vertical) + _pad(menu_title, inner) + blue(BOX.vertical))
         print(blue(BOX.t_right + BOX.horizontal * inner + BOX.t_left))
 
-        max_desc_w = max(20, inner - 38)
+        max_desc_w = max(12, inner - 44)
         for idx, (key, icon, title, desc) in enumerate(menu_items):
             is_active = (idx == selected_idx)
             desc_clipped = desc if len(desc) <= max_desc_w else desc[:max_desc_w - 1] + "…"
             if is_active:
-                cursor = cyan(bold(" ▶ "))
+                cursor = cyan(bold(" > "))
                 key_tag = magenta(bold(f"[{key}]"))
-                title_tag = bold(bright_white(f"{icon} {title:<26}"))
+                title_tag = bold(bright_white(f"{icon:<6} {title:<26}"))
                 desc_tag = cyan(f"· {desc_clipped}")
                 line = f" {cursor}{key_tag} {title_tag} {desc_tag}"
             else:
                 cursor = "   "
                 key_tag = dim(f"[{key}]")
-                title_tag = white(f"{icon} {title:<26}")
+                title_tag = white(f"{icon:<6} {title:<26}")
                 desc_tag = dim(f"· {desc_clipped}")
                 line = f" {cursor}{key_tag} {title_tag} {desc_tag}"
             print(blue(BOX.vertical) + _pad(line, inner) + blue(BOX.vertical))
@@ -211,16 +211,16 @@ def show_menu(width: int | None = None) -> None:
 
         # Keyboard navigation prompt
         nav_hint = t("nav_hint", default="Use W / S to navigate  ·  [Enter] Select  ·  [q] Exit")
-        print("  " + bold(magenta("◆ ")) + dim(nav_hint))
+        print("  " + bold(magenta("$ ")) + dim(nav_hint))
 
         try:
             key = read_key()
         except (KeyboardInterrupt, EOFError):
-            print("\n" + cyan(f"  {t('stopped_goodbye')} 👋\n"))
+            print("\n" + cyan(f"  $ {t('stopped_goodbye')}\n"))
             break
 
         if key in ("quit", "escape", "q"):
-            print("\n" + cyan(f"  {t('stopped_goodbye')} 👋\n"))
+            print("\n" + cyan(f"  $ {t('stopped_goodbye')}\n"))
             break
         elif key == "up":
             selected_idx = (selected_idx - 1) % len(menu_items)
@@ -250,7 +250,7 @@ def show_menu(width: int | None = None) -> None:
             continue
 
         if action_key in ("0", "q", "exit", "quit"):
-            print("\n" + cyan(f"  {t('stopped_goodbye')} 👋\n"))
+            print("\n" + cyan(f"  $ {t('stopped_goodbye')}\n"))
             break
 
         elif action_key == "1":
@@ -303,7 +303,7 @@ def _run_interactive_watch(renderer: TableRenderer) -> None:
             ]
             print(renderer.render(sections))
             print()
-            print(dim(f"  ↻  {t('live_monitoring', interval=interval)}"))
+            print(dim(f"  $ watch --interval {interval:g}s  # {t('live_monitoring', interval=interval)}"))
             time.sleep(interval)
     except KeyboardInterrupt:
         pass

@@ -112,4 +112,4 @@ def build_memory_section(info: MemoryInfo | None = None) -> Section:
     else:
         overall = Status.GOOD
 
-    return Section(title=t("sec_memory"), icon="💾", overall_status=overall, rows=rows)
+    return Section(title=t("sec_memory"), icon="RAM", overall_status=overall, rows=rows)
