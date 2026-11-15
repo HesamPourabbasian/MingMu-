@@ -17,8 +17,15 @@ from mingmu.core.advanced import (
 )
 from mingmu.core.battery import build_battery_section
 from mingmu.core.cpu import build_cpu_section
+from mingmu.core.disk import build_advanced_disk_section, build_disk_section
 from mingmu.core.memory import build_memory_section
+from mingmu.core.network import (
+    build_advanced_network_section,
+    build_network_section,
+)
+from mingmu.core.system_info import build_system_info_section
 from mingmu.display.banner import get_banner
+from mingmu.display.report import generate_html_report
 from mingmu.display.colors import (
     blue,
     bold,
@@ -172,9 +179,12 @@ def show_menu(width: int | None = None) -> None:
             ("2", "[BAT]", t("menu_opt_2_title"), t("menu_opt_2_desc")),
             ("3", "[CPU]", t("menu_opt_3_title"), t("menu_opt_3_desc")),
             ("4", "[RAM]", t("menu_opt_4_title"), t("menu_opt_4_desc")),
-            ("5", "[LIVE]", t("menu_opt_5_title"), t("menu_opt_5_desc")),
-            ("6", "[LANG]", t("menu_opt_6_title"), t("menu_opt_6_desc")),
-            ("7", "[HELP]", t("menu_opt_7_title"), t("menu_opt_7_desc")),
+            ("5", "[DSK]", t("menu_opt_8_title"), t("menu_opt_8_desc")),
+            ("6", "[NET]", t("menu_opt_9_title"), t("menu_opt_9_desc")),
+            ("7", "[LIVE]", t("menu_opt_5_title"), t("menu_opt_5_desc")),
+            ("8", "[REP]", t("menu_opt_10_title"), t("menu_opt_10_desc")),
+            ("9", "[LANG]", t("menu_opt_6_title"), t("menu_opt_6_desc")),
+            ("H", "[HELP]", t("menu_opt_7_title"), t("menu_opt_7_desc")),
             ("0", "[EXIT]", t("menu_opt_0_title"), t("menu_opt_0_desc")),
         ]
 
@@ -236,10 +246,12 @@ def show_menu(width: int | None = None) -> None:
             selected_idx = len(menu_items) - 1
             continue
 
-        # Check if user triggered action via Enter / Space or direct number key
+        # Check if user triggered action via Enter / Space or direct number/letter key
         action_key = None
         if key in ("enter", "space"):
             action_key = menu_items[selected_idx][0]
+        elif key in ("h", "H", "?"):
+            action_key = "H"
         elif key.isdigit():
             for i, item in enumerate(menu_items):
                 if item[0] == key:
@@ -260,6 +272,9 @@ def show_menu(width: int | None = None) -> None:
                 build_battery_section(),
                 build_cpu_section(),
                 build_memory_section(),
+                build_disk_section(),
+                build_network_section(),
+                build_system_info_section(),
             ]
             print(renderer.render(sections))
             _pause()
@@ -280,12 +295,37 @@ def show_menu(width: int | None = None) -> None:
             _pause()
 
         elif action_key == "5":
-            _run_interactive_watch(renderer)
+            _clear()
+            print(renderer.render([build_advanced_disk_section()]))
+            _pause()
 
         elif action_key == "6":
-            _select_language_menu(renderer)
+            _clear()
+            print(renderer.render([build_advanced_network_section()]))
+            _pause()
 
         elif action_key == "7":
+            _run_interactive_watch(renderer)
+
+        elif action_key == "8":
+            _clear()
+            sections = [
+                build_battery_section(),
+                build_cpu_section(),
+                build_memory_section(),
+                build_disk_section(),
+                build_network_section(),
+                build_system_info_section(),
+            ]
+            out_file = generate_html_report(sections)
+            print()
+            print(green(f"  [OK] {t('report_saved', path=str(out_file))}"))
+            _pause()
+
+        elif action_key == "9":
+            _select_language_menu(renderer)
+
+        elif action_key in ("H", "h", "7"):
             _clear()
             print(render_help_view(width=renderer.width))
             _pause()
@@ -301,6 +341,8 @@ def _run_interactive_watch(renderer: TableRenderer) -> None:
                     build_battery_section(),
                     build_cpu_section(),
                     build_memory_section(),
+                    build_disk_section(),
+                    build_network_section(),
                 ]
                 frame = render_live_dashboard(sections, width=renderer.width, interval=interval)
                 display.render(frame)

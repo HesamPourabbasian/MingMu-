@@ -2,21 +2,21 @@
 
 > Cross-Platform System Health and Hardware Diagnostic Monitor for Windows, macOS, and Linux.
 
-MingMu ("Bright Eyes") is a professional command-line interface (CLI) monitoring tool engineered to deliver accurate, real-time hardware diagnostics for battery condition, processor performance, and memory utilization across modern operating systems.
+MingMu ("Bright Eyes") is a professional command-line interface (CLI) monitoring tool engineered to deliver accurate, real-time hardware diagnostics for battery condition, processor performance, memory utilization, disk storage, and network throughput across modern operating systems.
 
 ---
 
 ## Overview
 
-Modern hardware architectures manage power, clock frequencies, and thermals through distinct operating system abstractions. Traditional command-line utilities often require root privileges, fail to expose low-level thermal registers, or are restricted to a single operating system.
+Modern hardware architectures manage power, clock frequencies, thermals, storage, and networking through distinct operating system abstractions. Traditional command-line utilities often require root privileges, fail to expose low-level thermal registers, or are restricted to a single operating system.
 
 MingMu provides a unified, cross-platform telemetry pipeline by interfacing directly with native system subsystems:
 
 - **Windows**: Queries the Windows Management Instrumentation (WMI/CIM) subsystem via non-elevated PowerShell calls to read `Win32_Battery`, `BatteryStaticData`, `BatteryFullChargedCapacity`, `BatteryCycleCount`, and `MSAcpi_ThermalZoneTemperature`. Configures console output for standard UTF-8 Unicode rendering across Windows Terminal, PowerShell, and Command Prompt.
 - **macOS**: Queries Apple Silicon internal thermal sensors (Performance Cores, Efficiency Cores, SoC Die, and Battery Gas Gauge) via rootless `IOHIDEventSystem` hooks, alongside official calibrated health metrics via `system_profiler` and `ioreg`.
-- **Linux**: Interrogates kernel `sysfs` trees (`/sys/class/power_supply/`, `/sys/class/thermal/`) and procfs virtual memory statistics.
+- **Linux**: Interrogates kernel `sysfs` trees (`/sys/class/power_supply/`, `/sys/class/thermal/`), virtual memory procfs statistics, and mounted block storage descriptors.
 
-All metrics are evaluated against deterministic threshold rules and formatted into bordered Unicode tables styled with Colorama ANSI color profiles.
+All metrics are evaluated against deterministic threshold rules and formatted into bordered Unicode tables styled with Colorama ANSI color profiles, or exported as standalone responsive HTML diagnostic reports and structured JSON objects.
 
 ---
 
@@ -47,12 +47,27 @@ All metrics are evaluated against deterministic threshold rules and formatted in
   - Swap utilization metrics and detection of memory exhaustion conditions.
   - Identification of top memory-consuming processes (PID, Name, Memory %, Resident Set Size).
 
+- **Disk & Filesystem Storage Telemetry**:
+  - Live per-partition utilization and space capacity (used, free, total) with visual progress bars.
+  - Filesystem type identification and mount point mapping across all active partitions.
+  - Disk I/O activity counters tracking cumulative read/write bytes and total I/O transfer operations.
+
+- **Network Bandwidth & Interface Telemetry**:
+  - Total cumulative bandwidth consumption (bytes sent and received) and packet volume metrics.
+  - Active network adapter enumeration with assigned IPv4 addressing, link speeds (Mbps), and MTU.
+  - Detection of transmission errors and dropped packet rates.
+
+- **Host System Runtime Telemetry**:
+  - System uptime formatted in human-readable days, hours, and minutes.
+  - System boot timestamp, hostname, OS kernel release, CPU architecture, and running process counts.
+
 ### Display and Usability
 
 - **Cyberpunk Shell Theme**: Cyan and blue framing, magenta telemetry accents, ASCII command prompts, and text tags create a high-contrast neon dashboard without emoji icons.
 - **Full-Width Responsive Layout**: Automatically adapts to full terminal width dynamically, ensuring borders and progress bars scale proportionally to any terminal dimensions.
 - **Personalized Hardware Greeting**: Automatically detects system user accounts and hardware models (e.g., Apple Silicon Mac, Windows PC, Linux machine) to display tailored status headers.
-- **Interactive Main Menu**: Terminal dashboard featuring stylized ASCII branding, numbered shortcuts, and instant help manuals.
+- **Interactive Main Menu**: Terminal dashboard featuring stylized ASCII branding, single-keystroke navigation (arrow keys or W/S/Enter), and instant help manuals.
+- **Standalone HTML Report Generation**: Export self-contained, responsive HTML diagnostic reports featuring dark cyberpunk UI, neon status badges, and progress gauges.
 - **Multi-Language Support (i18n)**: Full native localization supporting 8 languages (English, Spanish, Japanese, Russian, French, German, Chinese, Turkish) with runtime switching and persistent configuration.
 - **Advanced Diagnostic Views**: Dedicated expanded inspection screens for deep-dive analysis of individual subsystems.
 - **Real-Time Watch Mode**: Compact dashboard updates changed rows in place to avoid screen flicker, with configurable sampling intervals.
@@ -140,17 +155,20 @@ mingmu
 - **W / S keys**, **Up / Down Arrows (`↑` / `↓`)**, or **Vim keys (`k` / `j`)**: Move the active cursor selection up and down smoothly.
 - **Enter (`↵`)** or **Space**: Activate and open the highlighted view or diagnostic monitor.
 - **Escape** or **`q`**: Exit the application or return from submenus.
-- **Direct Numbers (`0`-`7`)**: Instant shortcut jump directly to the target view.
+- **Direct Numbers / Keys (`0`-`9`, `H`)**: Instant shortcut jump directly to the target view.
 
 The menu displays a personalized greeting with the detected system user and hardware model, rendering full-width bordered cards:
 
-- `[1]` **Full System Overview**: Combined table displaying Battery, CPU, and Memory summaries.
+- `[1]` **Full System Overview**: Combined table displaying Battery, CPU, Memory, Disk, Network, and Host summaries.
 - `[2]` **Advanced Battery Monitor**: Detailed electrical metrics, health condition, voltage, wattage, and hardware identifiers.
 - `[3]` **Advanced CPU Monitor**: Per-core utilization bars, die and core temperatures, load factor, and top processes.
 - `[4]` **Advanced Memory Monitor**: Detailed physical memory classification, swap usage, and heavy memory consumers.
-- `[5]` **Live Watch Dashboard**: Real-time auto-refreshing monitor (press Ctrl+C to return to menu).
-- `[6]` **Language Selection**: Interactive switcher for 8 supported languages with preference saved to disk.
-- `[7]` **Help and Documentation**: Built-in reference manual explaining all metrics, status levels, and CLI commands.
+- `[5]` **Advanced Disk Monitor**: Partition allocation gauges, mountpoints, free capacity, and I/O transfer ops.
+- `[6]` **Advanced Network Monitor**: Bandwidth throughput rates, adapter configurations (IPs, MTU), and connection states.
+- `[7]` **Live Watch Dashboard**: Real-time auto-refreshing monitor (press Ctrl+C to return to menu).
+- `[8]` **Export Diagnostic Report**: Generate a standalone, styled dark-themed HTML diagnostic report.
+- `[9]` **Language Selection**: Interactive switcher for 8 supported languages with preference saved to disk.
+- `[H]` **Help and Documentation**: Built-in reference manual explaining all metrics, status levels, and CLI commands.
 - `[0]` **Exit**: Close MingMu.
 
 ---
@@ -167,24 +185,28 @@ mingmu --all
 
 # Inspect battery health summary
 mingmu battery
-
-# Inspect advanced battery diagnostics (electrical specs, condition, cycle consumption)
-mingmu battery --advanced
-mingmu battery -a
+mingmu battery -a         # Advanced electrical breakdown & condition
 
 # Inspect CPU health summary
 mingmu cpu
-
-# Inspect advanced CPU diagnostics (per-core breakdown, core thermals, top processes)
-mingmu cpu --advanced
-mingmu cpu -a
+mingmu cpu -a             # Advanced per-core breakdown & thermals
 
 # Inspect memory health summary
 mingmu ram
+mingmu ram -a             # Advanced active/wired/swap classification
 
-# Inspect advanced memory diagnostics (active/wired/swap breakdown, top processes)
-mingmu ram --advanced
-mingmu ram -a
+# Inspect disk storage and filesystem health
+mingmu disk
+mingmu disk -a            # Advanced per-partition gauges & I/O ops
+
+# Inspect network throughput and adapter states
+mingmu net
+mingmu net -a             # Advanced interface IPs, MTU, errors & drops
+
+# Generate a standalone HTML diagnostic report
+mingmu report
+mingmu report -o ~/system_report.html   # Custom output path
+mingmu --report                         # One-line root flag
 
 # Display the comprehensive built-in documentation manual
 mingmu help-guide
@@ -284,6 +306,7 @@ MingMu evaluates raw metrics against defined baseline thresholds and assigns a s
 | CPU Load Factor (1m / Cores) | Above 1.50 | Above 3.00 | Ascending |
 | RAM Utilization | Above 75.0% | Above 90.0% | Ascending |
 | Swap Utilization | Above 50.0% | Above 80.0% | Ascending |
+| Disk Storage Utilization | Above 80.0% | Above 90.0% | Ascending |
 
 ---
 
@@ -294,20 +317,24 @@ mingmu/
 |-- pyproject.toml              # Build backend configuration, dependencies, and CLI entry point
 |-- README.md                   # Technical documentation
 |-- mingmu/
-|   |-- __init__.py             # Package version and constants
+|   |-- __init__.py             # Package version and constants (v2.0.0)
 |   |-- __main__.py             # Direct execution entry point (python -m mingmu)
 |   |-- cli.py                  # Click CLI group, subcommand routing, and Windows console setup
 |   |-- core/
 |   |   |-- advanced.py         # Advanced diagnostic tables for Battery, CPU, and RAM
 |   |   |-- battery.py          # Battery telemetry collector (macOS, Linux, Windows)
 |   |   |-- cpu.py              # CPU metrics, multi-core breakdown, and top process monitor
-|   |   `-- memory.py           # Physical RAM and virtual swap memory collector
+|   |   |-- disk.py             # Disk partition capacity, gauges, and I/O throughput
+|   |   |-- memory.py           # Physical RAM and virtual swap memory collector
+|   |   |-- network.py          # Network bandwidth, interfaces, IP addresses, and errors
+|   |   `-- system_info.py      # Host system identity, OS kernel, uptime, and process counts
 |   |-- display/
 |   |   |-- banner.py           # ASCII art rendering and dynamic progress bar formatters
 |   |   |-- colors.py           # Colorama color abstraction layer and status badges
 |   |   |-- formatters.py       # Human-readable unit formatters (bytes, time, frequency)
 |   |   |-- help_view.py        # Complete documentation manual renderer
 |   |   |-- menu.py             # Interactive terminal menu loop and keyboard navigation
+|   |   |-- report.py           # Standalone dark-themed HTML diagnostic report generator
 |   |   `-- table.py            # Box-drawing Unicode table layout engine
 |   |-- i18n/
 |   |   |-- __init__.py         # Internationalization manager, configuration, and t() engine
@@ -323,10 +350,14 @@ mingmu/
 `-- tests/
     |-- test_advanced.py        # Tests for advanced diagnostic sections, banners, and help view
     |-- test_collectors.py      # Tests for telemetry collectors and section builders
+    |-- test_disk.py            # Tests for disk storage collectors and partition diagnostics
     |-- test_formatters.py      # Tests for string formatters and byte conversions
     |-- test_i18n.py            # Tests for multi-language translation, fallback, and config
     |-- test_keyboard.py        # Tests for keyboard navigation and single-keystroke input
-    `-- test_platform.py        # Tests for platform detection and Windows support
+    |-- test_network.py         # Tests for network throughput and adapter diagnostics
+    |-- test_platform.py        # Tests for platform detection and Windows support
+    |-- test_report.py          # Tests for HTML report generation
+    `-- test_system_info.py     # Tests for system uptime and host metadata
 ```
 
 ---

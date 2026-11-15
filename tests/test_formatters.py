@@ -72,6 +72,9 @@ class TestFrequency:
 
 
 class TestSecondsToHuman:
+    def test_days_and_hours(self):
+        assert seconds_to_human(90000) == "1d 1h"
+
     def test_hours_and_minutes(self):
         assert seconds_to_human(5400) == "1h 30m"
 

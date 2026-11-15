@@ -128,6 +128,46 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
 
         # Watch
         "live_monitoring": "Live Monitoring (every {interval}s) · Press Ctrl+C to stop",
+
+        # Disk Metrics
+        "sec_disk": "DISK",
+        "sec_adv_disk": "ADVANCED DISK & FILESYSTEM DIAGNOSTICS",
+        "disk_usage": "Disk Usage",
+        "disk_free": "Free Space",
+        "disk_io_read": "Disk Read I/O",
+        "disk_io_write": "Disk Write I/O",
+        "disk_throughput": "Disk Throughput",
+
+        # Network Metrics
+        "sec_network": "NETWORK",
+        "sec_adv_network": "ADVANCED NETWORK DIAGNOSTICS",
+        "bytes_received": "Bytes Received",
+        "bytes_sent": "Bytes Sent",
+        "packets_received": "Packets Received",
+        "packets_sent": "Packets Sent",
+        "net_interface": "Network Interface",
+        "net_active_interfaces": "Active Interfaces",
+        "net_errors": "Network Errors",
+        "net_drops": "Dropped Packets",
+        "net_connections": "Active Connections",
+
+        # System Info
+        "sec_system_info": "SYSTEM INFO",
+        "uptime": "System Uptime",
+        "boot_time": "Boot Time",
+        "hostname": "Hostname",
+        "os_version": "OS Version",
+        "architecture": "Architecture",
+        "process_count": "Process Count",
+
+        # New Menu & Report Options
+        "menu_opt_8_title": "Advanced Disk Monitor",
+        "menu_opt_8_desc": "Filesystem partitions, free space, and I/O throughput",
+        "menu_opt_9_title": "Advanced Network Monitor",
+        "menu_opt_9_desc": "Bandwidth throughput, adapters, and active sockets",
+        "menu_opt_10_title": "Export Diagnostic Report",
+        "menu_opt_10_desc": "Generate a standalone dark-themed HTML report",
+        "report_saved": "HTML report successfully generated at {path}",
     },
 
     "es": {
@@ -235,6 +275,46 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "no_data_available": "No hay datos disponibles",
 
         "live_monitoring": "Monitoreo en Vivo (cada {interval}s) · Presione Ctrl+C para salir",
+
+        # Disk Metrics
+        "sec_disk": "DISCO",
+        "sec_adv_disk": "DIAGNÓSTICO AVANZADO DE DISCO Y SISTEMA DE ARCHIVOS",
+        "disk_usage": "Uso de Disco",
+        "disk_free": "Espacio Libre",
+        "disk_io_read": "Lectura I/O de Disco",
+        "disk_io_write": "Escritura I/O de Disco",
+        "disk_throughput": "Rendimiento de Disco",
+
+        # Network Metrics
+        "sec_network": "RED",
+        "sec_adv_network": "DIAGNÓSTICO AVANZADO DE RED",
+        "bytes_received": "Bytes Recibidos",
+        "bytes_sent": "Bytes Enviados",
+        "packets_received": "Paquetes Recibidos",
+        "packets_sent": "Paquetes Enviados",
+        "net_interface": "Interfaz de Red",
+        "net_active_interfaces": "Interfaces Activas",
+        "net_errors": "Errores de Red",
+        "net_drops": "Paquetes Descartados",
+        "net_connections": "Conexiones Activas",
+
+        # System Info
+        "sec_system_info": "INFORMACIÓN DEL SISTEMA",
+        "uptime": "Tiempo de Actividad",
+        "boot_time": "Hora de Inicio",
+        "hostname": "Nombre de Host",
+        "os_version": "Versión del SO",
+        "architecture": "Arquitectura",
+        "process_count": "Procesos Activos",
+
+        # New Menu & Report Options
+        "menu_opt_8_title": "Monitor Avanzado de Disco",
+        "menu_opt_8_desc": "Particiones, espacio libre y rendimiento I/O",
+        "menu_opt_9_title": "Monitor Avanzado de Red",
+        "menu_opt_9_desc": "Ancho de banda, adaptadores y sockets activos",
+        "menu_opt_10_title": "Exportar Informe de Diagnóstico",
+        "menu_opt_10_desc": "Generar informe HTML interactivo en modo oscuro",
+        "report_saved": "Informe HTML generado exitosamente en {path}",
     },
 
     "ja": {
@@ -342,6 +422,46 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "no_data_available": "利用可能なデータがありません",
 
         "live_monitoring": "ライブ監視中 ({interval}秒ごと) · Ctrl+C で戻る",
+
+        # Disk Metrics
+        "sec_disk": "ディスク",
+        "sec_adv_disk": "詳細ディスクおよびファイルシステム診断",
+        "disk_usage": "ディスク使用率",
+        "disk_free": "空き容量",
+        "disk_io_read": "ディスク読み込み I/O",
+        "disk_io_write": "ディスク書き込み I/O",
+        "disk_throughput": "ディスクスループット",
+
+        # Network Metrics
+        "sec_network": "ネットワーク",
+        "sec_adv_network": "詳細ネットワーク診断",
+        "bytes_received": "受信バイト数",
+        "bytes_sent": "送信バイト数",
+        "packets_received": "受信パケット数",
+        "packets_sent": "送信パケット数",
+        "net_interface": "ネットワークインターフェース",
+        "net_active_interfaces": "アクティブなインターフェース",
+        "net_errors": "ネットワークエラー",
+        "net_drops": "ドロップパケット",
+        "net_connections": "アクティブな接続数",
+
+        # System Info
+        "sec_system_info": "システム情報",
+        "uptime": "稼働時間",
+        "boot_time": "起動日時",
+        "hostname": "ホスト名",
+        "os_version": "OSバージョン",
+        "architecture": "アーキテクチャ",
+        "process_count": "実行中プロセス数",
+
+        # New Menu & Report Options
+        "menu_opt_8_title": "詳細ディスク監視",
+        "menu_opt_8_desc": "パーティション使用率、空き容量、I/O速度",
+        "menu_opt_9_title": "詳細ネットワーク監視",
+        "menu_opt_9_desc": "帯域幅、アダプター設定、アクティブ接続",
+        "menu_opt_10_title": "診断レポート出力",
+        "menu_opt_10_desc": "ダークテーマのHTML診断レポートファイルを生成",
+        "report_saved": "HTMLレポートが正常に生成されました: {path}",
     },
 
     "ru": {
@@ -449,6 +569,46 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "no_data_available": "Нет доступных данных",
 
         "live_monitoring": "Мониторинг в реальном времени (каждые {interval}с) · Нажмите Ctrl+C для выхода",
+
+        # Disk Metrics
+        "sec_disk": "ДИСК",
+        "sec_adv_disk": "РАСШИРЕННАЯ ДИАГНОСТИКА ДИСКОВ И ФАЙЛОВЫХ СИСТЕМ",
+        "disk_usage": "Использование диска",
+        "disk_free": "Свободное место",
+        "disk_io_read": "Чтение с диска (I/O)",
+        "disk_io_write": "Запись на диск (I/O)",
+        "disk_throughput": "Пропускная способность диска",
+
+        # Network Metrics
+        "sec_network": "СЕТЬ",
+        "sec_adv_network": "РАСШИРЕННАЯ ДИАГНОСТИКА СЕТИ",
+        "bytes_received": "Получено байт",
+        "bytes_sent": "Отправлено байт",
+        "packets_received": "Получено пакетов",
+        "packets_sent": "Отправлено пакетов",
+        "net_interface": "Сетевой интерфейс",
+        "net_active_interfaces": "Активные интерфейсы",
+        "net_errors": "Сетевые ошибки",
+        "net_drops": "Потерянные пакеты",
+        "net_connections": "Активные соединения",
+
+        # System Info
+        "sec_system_info": "СИСТЕМНАЯ ИНФОРМАЦИЯ",
+        "uptime": "Время работы",
+        "boot_time": "Время загрузки",
+        "hostname": "Имя узла (Hostname)",
+        "os_version": "Версия ОС",
+        "architecture": "Архитектура",
+        "process_count": "Число процессов",
+
+        # New Menu & Report Options
+        "menu_opt_8_title": "Расширенный мониторинг дисков",
+        "menu_opt_8_desc": "Разделы, свободное пространство и скорость I/O",
+        "menu_opt_9_title": "Расширенный мониторинг сети",
+        "menu_opt_9_desc": "Сетевой трафик, адаптеры и активные сокеты",
+        "menu_opt_10_title": "Экспорт диагностического отчета",
+        "menu_opt_10_desc": "Создание темного HTML-отчета о состоянии системы",
+        "report_saved": "HTML-отчет успешно сохранен: {path}",
     },
 
     "fr": {
@@ -556,6 +716,46 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "no_data_available": "Aucune donnée disponible",
 
         "live_monitoring": "Surveillance en direct (toutes les {interval}s) · Appuyez sur Ctrl+C pour quitter",
+
+        # Disk Metrics
+        "sec_disk": "DISQUE",
+        "sec_adv_disk": "DIAGNOSTIC AVANCÉ DU DISQUE ET DU SYSTÈME DE FICHIERS",
+        "disk_usage": "Utilisation du Disque",
+        "disk_free": "Espace Libre",
+        "disk_io_read": "Lecture Disque I/O",
+        "disk_io_write": "Écriture Disque I/O",
+        "disk_throughput": "Débit du Disque",
+
+        # Network Metrics
+        "sec_network": "RÉSEAU",
+        "sec_adv_network": "DIAGNOSTIC AVANCÉ DU RÉSEAU",
+        "bytes_received": "Octets Reçus",
+        "bytes_sent": "Octets Envoyés",
+        "packets_received": "Paquets Reçus",
+        "packets_sent": "Paquets Envoyés",
+        "net_interface": "Interface Réseau",
+        "net_active_interfaces": "Interfaces Actives",
+        "net_errors": "Erreurs Réseau",
+        "net_drops": "Paquets Rejetés",
+        "net_connections": "Connexions Actives",
+
+        # System Info
+        "sec_system_info": "INFOS SYSTÈME",
+        "uptime": "Temps d'Activité",
+        "boot_time": "Heure de Démarrage",
+        "hostname": "Nom d'Hôte",
+        "os_version": "Version de l'OS",
+        "architecture": "Architecture",
+        "process_count": "Nombre de Processus",
+
+        # New Menu & Report Options
+        "menu_opt_8_title": "Moniteur de Disque Avancé",
+        "menu_opt_8_desc": "Partitions, espace disponible et débit d'E/S",
+        "menu_opt_9_title": "Moniteur Réseau Avancé",
+        "menu_opt_9_desc": "Bande passante, adaptateurs et sockets actifs",
+        "menu_opt_10_title": "Exporter le Rapport de Diagnostic",
+        "menu_opt_10_desc": "Générer un rapport HTML autonome en thème sombre",
+        "report_saved": "Rapport HTML généré avec succès dans {path}",
     },
 
     "de": {
@@ -663,6 +863,46 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "no_data_available": "Keine Daten verfügbar",
 
         "live_monitoring": "Live-Überwachung (alle {interval}s) · Strg+C zum Beenden",
+
+        # Disk Metrics
+        "sec_disk": "FESTPLATTE / SPEICHER",
+        "sec_adv_disk": "ERWEITERTE FESTPLATTEN- & DATEISYSTEM-DIAGNOSE",
+        "disk_usage": "Festplattenauslastung",
+        "disk_free": "Freier Speicher",
+        "disk_io_read": "Festplatten-Lesevorgänge",
+        "disk_io_write": "Festplatten-Schreibvorgänge",
+        "disk_throughput": "Festplattendurchsatz",
+
+        # Network Metrics
+        "sec_network": "NETZWERK",
+        "sec_adv_network": "ERWEITERTE NETZWERKDIAGNOSE",
+        "bytes_received": "Empfangene Bytes",
+        "bytes_sent": "Gesendete Bytes",
+        "packets_received": "Empfangene Pakete",
+        "packets_sent": "Gesendete Pakete",
+        "net_interface": "Netzwerkschnittstelle",
+        "net_active_interfaces": "Aktive Schnittstellen",
+        "net_errors": "Netzwerkfehler",
+        "net_drops": "Verworfene Pakete",
+        "net_connections": "Aktive Verbindungen",
+
+        # System Info
+        "sec_system_info": "SYSTEMINFORMATIONEN",
+        "uptime": "Betriebszeit",
+        "boot_time": "Startzeitpunkt",
+        "hostname": "Hostname",
+        "os_version": "Betriebssystemversion",
+        "architecture": "Architektur",
+        "process_count": "Laufende Prozesse",
+
+        # New Menu & Report Options
+        "menu_opt_8_title": "Erweiterter Festplatten-Monitor",
+        "menu_opt_8_desc": "Partitionen, freier Speicher und E/A-Durchsatz",
+        "menu_opt_9_title": "Erweiterter Netzwerk-Monitor",
+        "menu_opt_9_desc": "Bandbreite, Netzwerkadapter und aktive Sockets",
+        "menu_opt_10_title": "Diagnosebericht Exportieren",
+        "menu_opt_10_desc": "Eigenständigen HTML-Bericht im Dark-Theme erzeugen",
+        "report_saved": "HTML-Bericht erfolgreich erstellt unter {path}",
     },
 
     "zh": {
@@ -770,6 +1010,46 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "no_data_available": "无可用数据",
 
         "live_monitoring": "实时监控刷新中 (每 {interval} 秒) · 按 Ctrl+C 退出",
+
+        # Disk Metrics
+        "sec_disk": "磁盘存储",
+        "sec_adv_disk": "深度磁盘与文件系统诊断",
+        "disk_usage": "磁盘使用率",
+        "disk_free": "剩余空间",
+        "disk_io_read": "磁盘读取 I/O",
+        "disk_io_write": "磁盘写入 I/O",
+        "disk_throughput": "磁盘吞吐量",
+
+        # Network Metrics
+        "sec_network": "网络通信",
+        "sec_adv_network": "深度网络流量与接口诊断",
+        "bytes_received": "接收流量 (下载)",
+        "bytes_sent": "发送流量 (上传)",
+        "packets_received": "接收数据包",
+        "packets_sent": "发送数据包",
+        "net_interface": "网络接口",
+        "net_active_interfaces": "活跃网卡数",
+        "net_errors": "网络传输错误",
+        "net_drops": "丢弃数据包",
+        "net_connections": "活跃连接数",
+
+        # System Info
+        "sec_system_info": "系统信息",
+        "uptime": "运行时间",
+        "boot_time": "系统引导时间",
+        "hostname": "主机名",
+        "os_version": "系统版本",
+        "architecture": "处理器架构",
+        "process_count": "运行进程数",
+
+        # New Menu & Report Options
+        "menu_opt_8_title": "深度磁盘监控",
+        "menu_opt_8_desc": "磁盘分区利用率、剩余容量与读写吞吐",
+        "menu_opt_9_title": "深度网络监控",
+        "menu_opt_9_desc": "网卡接口参数、带宽吞吐量与活跃网络套接字",
+        "menu_opt_10_title": "导出系统诊断报告",
+        "menu_opt_10_desc": "生成深色赛博朋克风格独立 HTML 健康诊断报告",
+        "report_saved": "HTML 诊断报告已成功生成于：{path}",
     },
 
     "tr": {
@@ -877,5 +1157,45 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "no_data_available": "Kullanılabilir veri yok",
 
         "live_monitoring": "Canlı İzleme ({interval}s aralıkla) · Çıkmak için Ctrl+C tuşlayın",
+
+        # Disk Metrics
+        "sec_disk": "DİSK",
+        "sec_adv_disk": "GELİŞMİŞ DİSK VE DOSYA SİSTEMİ TEŞHİSİ",
+        "disk_usage": "Disk Kullanımı",
+        "disk_free": "Boş Alan",
+        "disk_io_read": "Disk Okuma I/O",
+        "disk_io_write": "Disk Yazma I/O",
+        "disk_throughput": "Disk Veri Akışı",
+
+        # Network Metrics
+        "sec_network": "AĞ (NETWORK)",
+        "sec_adv_network": "GELİŞMİŞ AĞ TEŞHİSİ",
+        "bytes_received": "Alınan Bayt",
+        "bytes_sent": "Gönderilen Bayt",
+        "packets_received": "Alınan Paketler",
+        "packets_sent": "Gönderilen Paketler",
+        "net_interface": "Ağ Arayüzü",
+        "net_active_interfaces": "Etkin Arayüzler",
+        "net_errors": "Ağ Hataları",
+        "net_drops": "Bırakılan Paketler",
+        "net_connections": "Etkin Bağlantılar",
+
+        # System Info
+        "sec_system_info": "SİSTEM BİLGİSİ",
+        "uptime": "Çalışma Süresi",
+        "boot_time": "Önyükleme Zamanı",
+        "hostname": "Ana Bilgisayar Adı",
+        "os_version": "İşletim Sistemi Sürümü",
+        "architecture": "Mimari",
+        "process_count": "İşlem Sayısı",
+
+        # New Menu & Report Options
+        "menu_opt_8_title": "Gelişmiş Disk Monitörü",
+        "menu_opt_8_desc": "Bölüm kullanımı, boş alan ve I/O veri akışı",
+        "menu_opt_9_title": "Gelişmiş Ağ Monitörü",
+        "menu_opt_9_desc": "Bant genişliği, bağdaştırıcılar ve etkin soketler",
+        "menu_opt_10_title": "Tanılama Raporunu Dışa Aktar",
+        "menu_opt_10_desc": "Koyu temalı bağımsız HTML rapor dosyası oluştur",
+        "report_saved": "HTML raporu başarıyla oluşturuldu: {path}",
     },
 }

@@ -43,20 +43,25 @@ def frequency(mhz: float | None) -> str:
 
 
 def seconds_to_human(seconds: int | float | None) -> str:
-    """Convert seconds to ``Xh Ym`` or ``Xm Ys`` format."""
+    """Convert seconds to ``Xd Yh Zm``, ``Xh Ym``, or ``Xm Ys`` format."""
     if seconds is None or seconds < 0:
         return "N/A"
     seconds = int(seconds)
     if seconds == 0:
         return "0s"
-    hours, remainder = divmod(seconds, 3600)
+    days, remainder = divmod(seconds, 86400)
+    hours, remainder = divmod(remainder, 3600)
     minutes, secs = divmod(remainder, 60)
     parts: list[str] = []
+    if days:
+        parts.append(f"{days}d")
     if hours:
         parts.append(f"{hours}h")
-    if minutes:
+    if minutes and not days:
         parts.append(f"{minutes}m")
-    if secs and not hours:
+    elif minutes and days and not hours:
+        parts.append(f"{minutes}m")
+    if secs and not hours and not days:
         parts.append(f"{secs}s")
     return " ".join(parts) if parts else "0s"
 

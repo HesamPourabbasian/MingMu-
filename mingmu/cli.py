@@ -35,11 +35,15 @@ from mingmu.core.advanced import (
 )
 from mingmu.core.battery import build_battery_section
 from mingmu.core.cpu import build_cpu_section
+from mingmu.core.disk import build_advanced_disk_section, build_disk_section
 from mingmu.core.memory import build_memory_section
+from mingmu.core.network import build_advanced_network_section, build_network_section
+from mingmu.core.system_info import build_system_info_section
 from mingmu.display.colors import disable_colors
 from mingmu.display.help_view import render_help_view
 from mingmu.display.live import LiveDisplay, render_live_dashboard
 from mingmu.display.menu import show_menu
+from mingmu.display.report import generate_html_report
 from mingmu.display.table import Section, TableRenderer
 from mingmu.i18n import SUPPORTED_LANGUAGES, init_language, t
 from mingmu.utils.platform_detect import get_platform_info, is_supported
@@ -70,6 +74,9 @@ def _all_sections() -> list[Section]:
         build_battery_section(),
         build_cpu_section(),
         build_memory_section(),
+        build_disk_section(),
+        build_network_section(),
+        build_system_info_section(),
     ]
 
 
@@ -135,6 +142,7 @@ class MingMuGroup(click.Group):
 )
 @click.option("--no-color", is_flag=True, help="Disable coloured output.")
 @click.option("--json", "as_json", is_flag=True, help="Output in JSON format.")
+@click.option("--report", "report_path", is_flag=False, flag_value="", default=None, help="Generate HTML report (optional custom path).")
 @click.option("--width", type=int, default=None, help="Force table width (columns).")
 @click.version_option(__version__, prog_name=__app_name__)
 @click.pass_context
@@ -145,6 +153,7 @@ def main(
     lang: str | None,
     no_color: bool,
     as_json: bool,
+    report_path: str | None,
     width: int | None,
 ) -> None:
     """MingMu (明眸) system health monitor."""
@@ -154,6 +163,7 @@ def main(
     ctx.obj["lang"] = lang
     ctx.obj["no_color"] = no_color
     ctx.obj["as_json"] = as_json
+    ctx.obj["report_path"] = report_path
     ctx.obj["width"] = width
 
     init_language(cli_override=lang)
@@ -170,6 +180,14 @@ def main(
             err=True,
         )
         sys.exit(1)
+
+    if report_path is not None:
+        target = report_path if report_path != "" else None
+        sections = _all_sections()
+        out = generate_html_report(sections, output_path=target)
+        msg = t("report_saved", path=str(out))
+        click.echo(click.style(f"  [OK] {msg}", fg="green"))
+        ctx.exit()
 
     if force_menu:
         show_menu(width=width)
@@ -219,6 +237,41 @@ def ram_cmd(ctx: click.Context, advanced: bool) -> None:
     else:
         sections = [build_memory_section()]
     _output(ctx, sections)
+
+
+@main.command(name="disk", short_help="Show disk & filesystem health.")
+@click.option("-a", "--advanced", is_flag=True, help="Display per-partition usage, mountpoints, & I/O.")
+@click.pass_context
+def disk_cmd(ctx: click.Context, advanced: bool) -> None:
+    """Display disk storage & filesystem metrics."""
+    if advanced:
+        sections = [build_advanced_disk_section()]
+    else:
+        sections = [build_disk_section()]
+    _output(ctx, sections)
+
+
+@main.command(name="net", short_help="Show network throughput & interfaces.")
+@click.option("-a", "--advanced", is_flag=True, help="Display per-interface IPs, speeds, & error stats.")
+@click.pass_context
+def net_cmd(ctx: click.Context, advanced: bool) -> None:
+    """Display network traffic & adapter metrics."""
+    if advanced:
+        sections = [build_advanced_network_section()]
+    else:
+        sections = [build_network_section()]
+    _output(ctx, sections)
+
+
+@main.command(name="report", short_help="Export diagnostic HTML report.")
+@click.option("-o", "--output", "output_path", type=click.Path(), default=None, help="Custom output HTML path.")
+@click.pass_context
+def report_cmd(ctx: click.Context, output_path: str | None) -> None:
+    """Export complete hardware diagnostics to a standalone HTML report."""
+    sections = _all_sections()
+    out = generate_html_report(sections, output_path=output_path)
+    msg = t("report_saved", path=str(out))
+    click.echo(click.style(f"  [OK] {msg}", fg="green"))
 
 
 @main.command(name="help-guide", short_help="Comprehensive help & metric explanation.")

@@ -60,7 +60,7 @@ def get_banner(compact: bool = False, width: int | None = None) -> str:
     padding_sub = max(0, (term_width - len(clean_sub)) // 2)
     lines.append(" " * padding_sub + cyan(sub))
 
-    telemetry = "# sensors: battery | cpu | memory"
+    telemetry = "# sensors: battery | cpu | memory | disk | network"
     padding_telemetry = max(0, (term_width - len(telemetry)) // 2)
     lines.append(" " * padding_telemetry + magenta(telemetry))
 

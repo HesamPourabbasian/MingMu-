@@ -82,3 +82,8 @@ CPU_LOAD_FACTOR = Threshold(warning=1.5, critical=3.0)
 
 MEMORY_USAGE = Threshold(warning=75.0, critical=90.0)
 SWAP_USAGE = Threshold(warning=50.0, critical=80.0)
+
+# ── Disk thresholds ──────────────────────────────────────────
+
+DISK_USAGE = Threshold(warning=80.0, critical=90.0)
+
