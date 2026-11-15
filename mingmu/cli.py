@@ -36,6 +36,7 @@ from mingmu.core.advanced import (
 from mingmu.core.battery import build_battery_section
 from mingmu.core.cpu import build_cpu_section
 from mingmu.core.disk import build_advanced_disk_section, build_disk_section
+from mingmu.core.gpu import build_advanced_gpu_section, build_gpu_section
 from mingmu.core.memory import build_memory_section
 from mingmu.core.network import build_advanced_network_section, build_network_section
 from mingmu.core.system_info import build_system_info_section
@@ -73,6 +74,7 @@ def _all_sections() -> list[Section]:
     return [
         build_battery_section(),
         build_cpu_section(),
+        build_gpu_section(),
         build_memory_section(),
         build_disk_section(),
         build_network_section(),
@@ -227,6 +229,18 @@ def cpu_cmd(ctx: click.Context, advanced: bool) -> None:
     _output(ctx, sections)
 
 
+@main.command(name="gpu", short_help="Show GPU & graphics health.")
+@click.option("-a", "--advanced", is_flag=True, help="Display compute cores, VRAM breakdown, & thermals.")
+@click.pass_context
+def gpu_cmd(ctx: click.Context, advanced: bool) -> None:
+    """Display graphics processor (GPU) metrics."""
+    if advanced:
+        sections = [build_advanced_gpu_section()]
+    else:
+        sections = [build_gpu_section()]
+    _output(ctx, sections)
+
+
 @main.command(name="ram", short_help="Show memory health.")
 @click.option("-a", "--advanced", is_flag=True, help="Display detailed RAM breakdown, swap, & top consumers.")
 @click.pass_context
@@ -353,3 +367,7 @@ def _output(ctx: click.Context, sections: list[Section]) -> None:
     else:
         table = _render_sections(sections, ctx.obj.get("width"))
         click.echo(table)
+
+
+if __name__ == "__main__":
+    main()

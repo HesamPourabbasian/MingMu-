@@ -7,6 +7,11 @@ from mingmu.core.disk import (
     build_disk_section,
     collect_disk,
 )
+from mingmu.core.gpu import (
+    build_advanced_gpu_section,
+    build_gpu_section,
+    collect_gpu,
+)
 from mingmu.core.memory import build_memory_section, collect_memory
 from mingmu.core.network import (
     build_advanced_network_section,
@@ -23,6 +28,9 @@ __all__ = [
     "build_battery_section",
     "collect_cpu",
     "build_cpu_section",
+    "collect_gpu",
+    "build_gpu_section",
+    "build_advanced_gpu_section",
     "collect_memory",
     "build_memory_section",
     "collect_disk",

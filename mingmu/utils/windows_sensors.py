@@ -161,3 +161,49 @@ def get_windows_thermal_readings() -> WindowsThermalReadings:
         cpu_temp = round(float(raw), 1)
 
     return WindowsThermalReadings(cpu_temp_c=cpu_temp, battery_temp_c=None)
+
+
+class WindowsGPUReadings(NamedTuple):
+    name: str | None
+    driver_version: str | None
+    adapter_ram_bytes: int | None
+    resolution: str | None
+    status: str | None
+
+
+def get_windows_gpu_readings() -> list[WindowsGPUReadings]:
+    """Retrieve graphics display adapter details on Windows."""
+    script = """
+    $res = @()
+    try {
+        $gpus = Get-CimInstance Win32_VideoController -ErrorAction SilentlyContinue
+        foreach ($g in $gpus) {
+            $h = $g.CurrentHorizontalResolution
+            $v = $g.CurrentVerticalResolution
+            $res += @{
+                Name = $g.Name
+                DriverVersion = $g.DriverVersion
+                AdapterRAM = $g.AdapterRAM
+                Resolution = if ($h -and $v) { "$h x $v" } else { $null }
+                Status = $g.Status
+            }
+        }
+    } catch {}
+    $res
+    """
+    raw = _run_powershell_json(script, timeout=3.0)
+    results: list[WindowsGPUReadings] = []
+    if isinstance(raw, dict):
+        raw = [raw]
+    if isinstance(raw, list):
+        for item in raw:
+            if isinstance(item, dict) and item.get("Name"):
+                ram = item.get("AdapterRAM")
+                results.append(WindowsGPUReadings(
+                    name=str(item.get("Name")).strip(),
+                    driver_version=str(item.get("DriverVersion")).strip() if item.get("DriverVersion") else None,
+                    adapter_ram_bytes=int(ram) if isinstance(ram, (int, float)) and ram > 0 else None,
+                    resolution=str(item.get("Resolution")).strip() if item.get("Resolution") else None,
+                    status=str(item.get("Status")).strip() if item.get("Status") else None,
+                ))
+    return results

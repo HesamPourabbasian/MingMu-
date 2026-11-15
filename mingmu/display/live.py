@@ -25,7 +25,7 @@ def _summary_rows(section: Section) -> list[MetricRow]:
     if not section.rows:
         return []
 
-    if section.icon in ("BAT", "CPU"):
+    if section.icon in ("BAT", "CPU", "GPU"):
         primary = section.rows[0]
         temperature = next(
             (row for row in section.rows if row.label == t("temperature")),
@@ -33,7 +33,7 @@ def _summary_rows(section: Section) -> list[MetricRow]:
         )
         if temperature is not None and temperature is not primary:
             return [primary, temperature]
-        return [primary]
+        return section.rows[:2]
 
     if section.icon == "RAM":
         return section.rows[:2]

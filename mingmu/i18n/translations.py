@@ -168,6 +168,24 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "menu_opt_10_title": "Export Diagnostic Report",
         "menu_opt_10_desc": "Generate a standalone dark-themed HTML report",
         "report_saved": "HTML report successfully generated at {path}",
+
+        # GPU Metrics
+        "sec_gpu": "GPU / GRAPHICS",
+        "sec_adv_gpu": "ADVANCED GPU & GRAPHICS DIAGNOSTICS",
+        "no_gpu_detected": "No dedicated or integrated GPU detected",
+        "gpu_model": "GPU Model",
+        "gpu_cores": "Compute Cores",
+        "gpu_usage": "GPU Utilization",
+        "gpu_temp": "GPU Temperature",
+        "vram_usage": "VRAM Utilization",
+        "vram_total": "Total VRAM",
+        "vram_architecture": "Memory Architecture",
+        "vram_unified": "Unified Memory (Apple Silicon)",
+        "graphics_api": "Graphics API",
+        "driver_version": "Driver Version",
+        "active_display": "Active Display",
+        "menu_opt_gpu_title": "Advanced GPU Monitor",
+        "menu_opt_gpu_desc": "Graphics processor, compute cores, VRAM, and thermals",
     },
 
     "es": {
@@ -315,6 +333,24 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "menu_opt_10_title": "Exportar Informe de Diagnóstico",
         "menu_opt_10_desc": "Generar informe HTML interactivo en modo oscuro",
         "report_saved": "Informe HTML generado exitosamente en {path}",
+
+        # GPU Metrics
+        "sec_gpu": "GPU / GRÁFICOS",
+        "sec_adv_gpu": "DIAGNÓSTICO AVANZADO DE GPU Y GRÁFICOS",
+        "no_gpu_detected": "No se detectó GPU dedicada o integrada",
+        "gpu_model": "Modelo de GPU",
+        "gpu_cores": "Núcleos de Cómputo",
+        "gpu_usage": "Uso de GPU",
+        "gpu_temp": "Temperatura de GPU",
+        "vram_usage": "Uso de VRAM",
+        "vram_total": "VRAM Total",
+        "vram_architecture": "Arquitectura de Memoria",
+        "vram_unified": "Memoria Unificada (Apple Silicon)",
+        "graphics_api": "API de Gráficos",
+        "driver_version": "Versión del Controlador",
+        "active_display": "Pantalla Activa",
+        "menu_opt_gpu_title": "Monitor Avanzado de GPU",
+        "menu_opt_gpu_desc": "Procesador gráfico, núcleos, VRAM y temperatura",
     },
 
     "ja": {
@@ -462,6 +498,24 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "menu_opt_10_title": "診断レポート出力",
         "menu_opt_10_desc": "ダークテーマのHTML診断レポートファイルを生成",
         "report_saved": "HTMLレポートが正常に生成されました: {path}",
+
+        # GPU Metrics
+        "sec_gpu": "GPU / グラフィックス",
+        "sec_adv_gpu": "詳細GPUおよびグラフィックス診断",
+        "no_gpu_detected": "検出されたGPUはありません",
+        "gpu_model": "GPUモデル",
+        "gpu_cores": "コンピュートコア数",
+        "gpu_usage": "GPU使用率",
+        "gpu_temp": "GPU温度",
+        "vram_usage": "VRAM使用率",
+        "vram_total": "総VRAM",
+        "vram_architecture": "メモリアーキテクチャ",
+        "vram_unified": "ユニファイドメモリ (Apple Silicon)",
+        "graphics_api": "グラフィックスAPI",
+        "driver_version": "ドライババージョン",
+        "active_display": "アクティブディスプレイ",
+        "menu_opt_gpu_title": "詳細GPU監視",
+        "menu_opt_gpu_desc": "グラフィックス、コア数、VRAM、温度診断",
     },
 
     "ru": {
@@ -609,6 +663,24 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "menu_opt_10_title": "Экспорт диагностического отчета",
         "menu_opt_10_desc": "Создание темного HTML-отчета о состоянии системы",
         "report_saved": "HTML-отчет успешно сохранен: {path}",
+
+        # GPU Metrics
+        "sec_gpu": "GPU / ГРАФИКА",
+        "sec_adv_gpu": "РАСШИРЕННАЯ ДИАГНОСТИКА GPU И ГРАФИКИ",
+        "no_gpu_detected": "Видеокарта не обнаружена",
+        "gpu_model": "Модель GPU",
+        "gpu_cores": "Вычислительные ядра",
+        "gpu_usage": "Загрузка GPU",
+        "gpu_temp": "Температура GPU",
+        "vram_usage": "Использование VRAM",
+        "vram_total": "Объем VRAM",
+        "vram_architecture": "Архитектура памяти",
+        "vram_unified": "Объединенная память (Apple Silicon)",
+        "graphics_api": "Графический API",
+        "driver_version": "Версия драйвера",
+        "active_display": "Активный дисплей",
+        "menu_opt_gpu_title": "Расширенный мониторинг GPU",
+        "menu_opt_gpu_desc": "Графический процессор, ядра, VRAM и температура",
     },
 
     "fr": {
@@ -756,6 +828,24 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "menu_opt_10_title": "Exporter le Rapport de Diagnostic",
         "menu_opt_10_desc": "Générer un rapport HTML autonome en thème sombre",
         "report_saved": "Rapport HTML généré avec succès dans {path}",
+
+        # GPU Metrics
+        "sec_gpu": "PROCESSEUR GRAPHIQUE (GPU)",
+        "sec_adv_gpu": "DIAGNOSTIC AVANCÉ GPU & GRAPHIQUE",
+        "no_gpu_detected": "Aucun GPU dédié ou intégré détecté",
+        "gpu_model": "Modèle de GPU",
+        "gpu_cores": "Cœurs de Calcul",
+        "gpu_usage": "Utilisation GPU",
+        "gpu_temp": "Température GPU",
+        "vram_usage": "Utilisation VRAM",
+        "vram_total": "VRAM Totale",
+        "vram_architecture": "Architecture Mémoire",
+        "vram_unified": "Mémoire Unifiée (Apple Silicon)",
+        "graphics_api": "API Graphique",
+        "driver_version": "Version du Pilote",
+        "active_display": "Écran Actif",
+        "menu_opt_gpu_title": "Moniteur GPU Avancé",
+        "menu_opt_gpu_desc": "Processeur graphique, cœurs, VRAM et thermie",
     },
 
     "de": {
@@ -903,6 +993,24 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "menu_opt_10_title": "Diagnosebericht Exportieren",
         "menu_opt_10_desc": "Eigenständigen HTML-Bericht im Dark-Theme erzeugen",
         "report_saved": "HTML-Bericht erfolgreich erstellt unter {path}",
+
+        # GPU Metrics
+        "sec_gpu": "GRAFIKKARTE (GPU)",
+        "sec_adv_gpu": "ERWEITERTE GPU- & GRAFIKDIAGNOSE",
+        "no_gpu_detected": "Keine dedizierte oder integrierte GPU erkannt",
+        "gpu_model": "GPU-Modell",
+        "gpu_cores": "Rechenkerne",
+        "gpu_usage": "GPU-Auslastung",
+        "gpu_temp": "GPU-Temperatur",
+        "vram_usage": "VRAM-Auslastung",
+        "vram_total": "Gesamter VRAM",
+        "vram_architecture": "Speicherarchitektur",
+        "vram_unified": "Gemeinsamer Speicher (Apple Silicon)",
+        "graphics_api": "Grafik-API",
+        "driver_version": "Treiberversion",
+        "active_display": "Aktives Display",
+        "menu_opt_gpu_title": "Erweiterter GPU-Monitor",
+        "menu_opt_gpu_desc": "Grafikprozessor, Rechenkerne, VRAM und Temperatur",
     },
 
     "zh": {
@@ -1050,6 +1158,24 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "menu_opt_10_title": "导出系统诊断报告",
         "menu_opt_10_desc": "生成深色赛博朋克风格独立 HTML 健康诊断报告",
         "report_saved": "HTML 诊断报告已成功生成于：{path}",
+
+        # GPU Metrics
+        "sec_gpu": "图形处理器 (GPU)",
+        "sec_adv_gpu": "深度 GPU 与图形硬件诊断",
+        "no_gpu_detected": "未检测到独立或集成 GPU 显卡",
+        "gpu_model": "GPU 显卡型号",
+        "gpu_cores": "计算核心数",
+        "gpu_usage": "GPU 核心利用率",
+        "gpu_temp": "GPU 芯片结温",
+        "vram_usage": "显存 (VRAM) 占用率",
+        "vram_total": "显存总容量",
+        "vram_architecture": "显存架构",
+        "vram_unified": "统一内存架构 (Apple Silicon)",
+        "graphics_api": "图形 API 支持",
+        "driver_version": "显卡驱动版本",
+        "active_display": "当前输出显示器",
+        "menu_opt_gpu_title": "深度 GPU 显卡监控",
+        "menu_opt_gpu_desc": "图形处理器、核心规模、显存占用与芯片结温",
     },
 
     "tr": {
@@ -1197,5 +1323,23 @@ TRANSLATIONS: dict[str, dict[str, str]] = {
         "menu_opt_10_title": "Tanılama Raporunu Dışa Aktar",
         "menu_opt_10_desc": "Koyu temalı bağımsız HTML rapor dosyası oluştur",
         "report_saved": "HTML raporu başarıyla oluşturuldu: {path}",
+
+        # GPU Metrics
+        "sec_gpu": "GRAFİK KARTI (GPU)",
+        "sec_adv_gpu": "GELİŞMİŞ GPU VE GRAFİK TEŞHİSİ",
+        "no_gpu_detected": "Harici veya dahili GPU algılanmadı",
+        "gpu_model": "GPU Modeli",
+        "gpu_cores": "İşlem Çekirdekleri",
+        "gpu_usage": "GPU Kullanımı",
+        "gpu_temp": "GPU Sıcaklığı",
+        "vram_usage": "VRAM Kullanımı",
+        "vram_total": "Toplam VRAM",
+        "vram_architecture": "Bellek Mimarisi",
+        "vram_unified": "Birleşik Bellek (Apple Silicon)",
+        "graphics_api": "Grafik API",
+        "driver_version": "Sürücü Sürümü",
+        "active_display": "Etkin Ekran",
+        "menu_opt_gpu_title": "Gelişmiş GPU Monitörü",
+        "menu_opt_gpu_desc": "Grafik işlemcisi, çekirdekler, VRAM ve termal durum",
     },
 }

@@ -19,6 +19,7 @@ log = logging.getLogger(__name__)
 class MacThermalReadings(NamedTuple):
     battery_temp_c: float | None
     cpu_temp_c: float | None
+    gpu_temp_c: float | None = None
 
 
 class MacBatteryProfile(NamedTuple):
@@ -156,7 +157,7 @@ def get_macos_thermal_readings() -> MacThermalReadings:
 
     readings = _sensor_reader.read_temperatures()
     if not readings:
-        return MacThermalReadings(battery_temp_c=None, cpu_temp_c=None)
+        return MacThermalReadings(battery_temp_c=None, cpu_temp_c=None, gpu_temp_c=None)
 
     # Battery temperature
     bat_temp: float | None = None
@@ -178,7 +179,18 @@ def get_macos_thermal_readings() -> MacThermalReadings:
         # Use average of CPU core/die sensor readings
         cpu_temp = round(sum(cpu_temps) / len(cpu_temps), 1)
 
-    return MacThermalReadings(battery_temp_c=bat_temp, cpu_temp_c=cpu_temp)
+    # GPU temperature
+    gpu_temps: list[float] = []
+    for name, temp in readings.items():
+        lower = name.lower()
+        if any(token in lower for token in ("gpu", "gacc", "tg0")):
+            gpu_temps.append(temp)
+
+    gpu_temp: float | None = None
+    if gpu_temps:
+        gpu_temp = round(sum(gpu_temps) / len(gpu_temps), 1)
+
+    return MacThermalReadings(battery_temp_c=bat_temp, cpu_temp_c=cpu_temp, gpu_temp_c=gpu_temp)
 
 
 def get_macos_battery_profile() -> MacBatteryProfile:

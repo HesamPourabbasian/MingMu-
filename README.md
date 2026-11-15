@@ -2,7 +2,7 @@
 
 > Cross-Platform System Health and Hardware Diagnostic Monitor for Windows, macOS, and Linux.
 
-MingMu ("Bright Eyes") is a professional command-line interface (CLI) monitoring tool engineered to deliver accurate, real-time hardware diagnostics for battery condition, processor performance, memory utilization, disk storage, and network throughput across modern operating systems.
+MingMu ("Bright Eyes") is a professional command-line interface (CLI) monitoring tool engineered to deliver accurate, real-time hardware diagnostics for battery condition, processor performance, graphic cards (GPU), memory utilization, disk storage, and network throughput across modern operating systems.
 
 ---
 
@@ -12,9 +12,9 @@ Modern hardware architectures manage power, clock frequencies, thermals, storage
 
 MingMu provides a unified, cross-platform telemetry pipeline by interfacing directly with native system subsystems:
 
-- **Windows**: Queries the Windows Management Instrumentation (WMI/CIM) subsystem via non-elevated PowerShell calls to read `Win32_Battery`, `BatteryStaticData`, `BatteryFullChargedCapacity`, `BatteryCycleCount`, and `MSAcpi_ThermalZoneTemperature`. Configures console output for standard UTF-8 Unicode rendering across Windows Terminal, PowerShell, and Command Prompt.
-- **macOS**: Queries Apple Silicon internal thermal sensors (Performance Cores, Efficiency Cores, SoC Die, and Battery Gas Gauge) via rootless `IOHIDEventSystem` hooks, alongside official calibrated health metrics via `system_profiler` and `ioreg`.
-- **Linux**: Interrogates kernel `sysfs` trees (`/sys/class/power_supply/`, `/sys/class/thermal/`), virtual memory procfs statistics, and mounted block storage descriptors.
+- **Windows**: Queries the Windows Management Instrumentation (WMI/CIM) subsystem via non-elevated PowerShell calls to read `Win32_Battery`, `Win32_VideoController`, `BatteryStaticData`, `BatteryFullChargedCapacity`, `BatteryCycleCount`, and `MSAcpi_ThermalZoneTemperature`. Also queries `nvidia-smi` when dedicated NVIDIA hardware is present. Configures console output for standard UTF-8 Unicode rendering across Windows Terminal, PowerShell, and Command Prompt.
+- **macOS**: Queries Apple Silicon internal thermal sensors (Performance Cores, Efficiency Cores, GPU MTR, SoC Die, and Battery Gas Gauge) via rootless `IOHIDEventSystem` hooks, alongside official calibrated health metrics and display adapters via `system_profiler` (`SPDisplaysDataType`, `SPPowerDataType`) and `ioreg`.
+- **Linux**: Interrogates kernel `sysfs` trees (`/sys/class/power_supply/`, `/sys/class/thermal/`, `/sys/class/drm/`), virtual memory procfs statistics, mounted block storage descriptors, alongside `nvidia-smi` and `lspci` GPU buses.
 
 All metrics are evaluated against deterministic threshold rules and formatted into bordered Unicode tables styled with Colorama ANSI color profiles, or exported as standalone responsive HTML diagnostic reports and structured JSON objects.
 
@@ -40,6 +40,15 @@ All metrics are evaluated against deterministic threshold rules and formatted in
   - Thermal telemetry: Package temperature, Performance Cores (pACC), Efficiency Cores (eACC), SoC Die junction, or ACPI thermal zones.
   - Load average metrics (1m, 5m, 15m) and core-normalized Load Factor calculations on POSIX systems.
   - Identification of top CPU-consuming processes (PID, Name, CPU %, Memory %).
+
+- **Graphics Card (GPU) & Display Telemetry**:
+  - GPU model identification, vendor classification, and driver version.
+  - Compute core counts (Apple Silicon GPU Cores, NVIDIA CUDA cores / Stream processors).
+  - Real-time GPU compute utilization with dynamic visual progress gauges.
+  - Thermal monitoring via dedicated GPU die sensors (`GPU MTR Temp Sensors` on Apple Silicon, NVIDIA SMI, and DRM sysfs).
+  - Video Memory (VRAM): Dedicated VRAM capacity and live consumption, or Apple Silicon SoC Unified Memory architecture detection.
+  - Graphics API compatibility (Metal 3/4, DirectX 12 Ultimate, Vulkan).
+  - Connected display resolution and display mode enumeration (e.g. 2560x1600 Retina, 4K UHD).
 
 - **Memory and Swap Saturation**:
   - Physical RAM breakdown: Total, Used, Available, Free, Active, Inactive, and Wired (Kernel) memory.
@@ -159,10 +168,11 @@ mingmu
 
 The menu displays a personalized greeting with the detected system user and hardware model, rendering full-width bordered cards:
 
-- `[1]` **Full System Overview**: Combined table displaying Battery, CPU, Memory, Disk, Network, and Host summaries.
+- `[1]` **Full System Overview**: Combined table displaying Battery, CPU, GPU, Memory, Disk, Network, and Host summaries.
 - `[2]` **Advanced Battery Monitor**: Detailed electrical metrics, health condition, voltage, wattage, and hardware identifiers.
 - `[3]` **Advanced CPU Monitor**: Per-core utilization bars, die and core temperatures, load factor, and top processes.
 - `[4]` **Advanced Memory Monitor**: Detailed physical memory classification, swap usage, and heavy memory consumers.
+- `[G]` **Advanced GPU Monitor**: Graphics processor, compute cores, VRAM, active displays, and thermals.
 - `[5]` **Advanced Disk Monitor**: Partition allocation gauges, mountpoints, free capacity, and I/O transfer ops.
 - `[6]` **Advanced Network Monitor**: Bandwidth throughput rates, adapter configurations (IPs, MTU), and connection states.
 - `[7]` **Live Watch Dashboard**: Real-time auto-refreshing monitor (press Ctrl+C to return to menu).
@@ -190,6 +200,10 @@ mingmu battery -a         # Advanced electrical breakdown & condition
 # Inspect CPU health summary
 mingmu cpu
 mingmu cpu -a             # Advanced per-core breakdown & thermals
+
+# Inspect GPU & graphics health summary
+mingmu gpu
+mingmu gpu -a             # Advanced compute cores, VRAM breakdown & thermals
 
 # Inspect memory health summary
 mingmu ram
@@ -304,6 +318,9 @@ MingMu evaluates raw metrics against defined baseline thresholds and assigns a s
 | CPU Utilization | Above 70.0% | Above 90.0% | Ascending |
 | CPU Package Temperature | Above 75.0 deg C | Above 95.0 deg C | Ascending |
 | CPU Load Factor (1m / Cores) | Above 1.50 | Above 3.00 | Ascending |
+| GPU Utilization | Above 80.0% | Above 95.0% | Ascending |
+| GPU Temperature | Above 80.0 deg C | Above 95.0 deg C | Ascending |
+| VRAM Utilization | Above 80.0% | Above 95.0% | Ascending |
 | RAM Utilization | Above 75.0% | Above 90.0% | Ascending |
 | Swap Utilization | Above 50.0% | Above 80.0% | Ascending |
 | Disk Storage Utilization | Above 80.0% | Above 90.0% | Ascending |
@@ -325,6 +342,7 @@ mingmu/
 |   |   |-- battery.py          # Battery telemetry collector (macOS, Linux, Windows)
 |   |   |-- cpu.py              # CPU metrics, multi-core breakdown, and top process monitor
 |   |   |-- disk.py             # Disk partition capacity, gauges, and I/O throughput
+|   |   |-- gpu.py              # GPU, compute cores, VRAM, and display telemetry
 |   |   |-- memory.py           # Physical RAM and virtual swap memory collector
 |   |   |-- network.py          # Network bandwidth, interfaces, IP addresses, and errors
 |   |   `-- system_info.py      # Host system identity, OS kernel, uptime, and process counts
@@ -349,9 +367,11 @@ mingmu/
 |       `-- windows_sensors.py  # Windows WMI/CIM and PowerShell telemetry integration
 `-- tests/
     |-- test_advanced.py        # Tests for advanced diagnostic sections, banners, and help view
+    |-- test_cli.py             # Tests for CLI subcommands, flags, JSON exports, and watch mode
     |-- test_collectors.py      # Tests for telemetry collectors and section builders
     |-- test_disk.py            # Tests for disk storage collectors and partition diagnostics
     |-- test_formatters.py      # Tests for string formatters and byte conversions
+    |-- test_gpu.py             # Tests for GPU collector, VRAM architecture, and thresholds
     |-- test_i18n.py            # Tests for multi-language translation, fallback, and config
     |-- test_keyboard.py        # Tests for keyboard navigation and single-keystroke input
     |-- test_network.py         # Tests for network throughput and adapter diagnostics

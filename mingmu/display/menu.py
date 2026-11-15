@@ -18,6 +18,7 @@ from mingmu.core.advanced import (
 from mingmu.core.battery import build_battery_section
 from mingmu.core.cpu import build_cpu_section
 from mingmu.core.disk import build_advanced_disk_section, build_disk_section
+from mingmu.core.gpu import build_advanced_gpu_section, build_gpu_section
 from mingmu.core.memory import build_memory_section
 from mingmu.core.network import (
     build_advanced_network_section,
@@ -179,6 +180,7 @@ def show_menu(width: int | None = None) -> None:
             ("2", "[BAT]", t("menu_opt_2_title"), t("menu_opt_2_desc")),
             ("3", "[CPU]", t("menu_opt_3_title"), t("menu_opt_3_desc")),
             ("4", "[RAM]", t("menu_opt_4_title"), t("menu_opt_4_desc")),
+            ("G", "[GPU]", t("menu_opt_gpu_title"), t("menu_opt_gpu_desc")),
             ("5", "[DSK]", t("menu_opt_8_title"), t("menu_opt_8_desc")),
             ("6", "[NET]", t("menu_opt_9_title"), t("menu_opt_9_desc")),
             ("7", "[LIVE]", t("menu_opt_5_title"), t("menu_opt_5_desc")),
@@ -251,7 +253,17 @@ def show_menu(width: int | None = None) -> None:
         if key in ("enter", "space"):
             action_key = menu_items[selected_idx][0]
         elif key in ("h", "H", "?"):
+            for i, item in enumerate(menu_items):
+                if item[0] == "H":
+                    selected_idx = i
+                    break
             action_key = "H"
+        elif key in ("g", "G"):
+            for i, item in enumerate(menu_items):
+                if item[0] == "G":
+                    selected_idx = i
+                    break
+            action_key = "G"
         elif key.isdigit():
             for i, item in enumerate(menu_items):
                 if item[0] == key:
@@ -271,6 +283,7 @@ def show_menu(width: int | None = None) -> None:
             sections = [
                 build_battery_section(),
                 build_cpu_section(),
+                build_gpu_section(),
                 build_memory_section(),
                 build_disk_section(),
                 build_network_section(),
@@ -294,6 +307,11 @@ def show_menu(width: int | None = None) -> None:
             print(renderer.render([build_advanced_memory_section()]))
             _pause()
 
+        elif action_key == "G":
+            _clear()
+            print(renderer.render([build_advanced_gpu_section()]))
+            _pause()
+
         elif action_key == "5":
             _clear()
             print(renderer.render([build_advanced_disk_section()]))
@@ -312,6 +330,7 @@ def show_menu(width: int | None = None) -> None:
             sections = [
                 build_battery_section(),
                 build_cpu_section(),
+                build_gpu_section(),
                 build_memory_section(),
                 build_disk_section(),
                 build_network_section(),
@@ -340,6 +359,7 @@ def _run_interactive_watch(renderer: TableRenderer) -> None:
                 sections = [
                     build_battery_section(),
                     build_cpu_section(),
+                    build_gpu_section(),
                     build_memory_section(),
                     build_disk_section(),
                     build_network_section(),

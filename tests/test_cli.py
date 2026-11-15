@@ -25,6 +25,7 @@ def test_cli_help(runner):
     assert result.exit_code == 0
     assert "battery" in result.output
     assert "cpu" in result.output
+    assert "gpu" in result.output
     assert "ram" in result.output
     assert "disk" in result.output
     assert "net" in result.output
@@ -36,6 +37,7 @@ def test_cli_all(runner):
     result = runner.invoke(main, ["--all"])
     assert result.exit_code == 0
     assert "BATTERY" in result.output or "CPU" in result.output
+    assert "GPU" in result.output
     assert "DISK" in result.output
     assert "NETWORK" in result.output
     assert "SYSTEM INFO" in result.output
@@ -47,6 +49,7 @@ def test_cli_json(runner):
     data = json.loads(result.output)
     assert data["version"] == "2.0.0"
     assert "sections" in data
+    assert "GPU / GRAPHICS" in data["sections"]
     assert "DISK" in data["sections"]
     assert "NETWORK" in data["sections"]
     assert "SYSTEM INFO" in data["sections"]
@@ -74,6 +77,18 @@ def test_cli_cpu_advanced(runner):
     result = runner.invoke(main, ["cpu", "-a"])
     assert result.exit_code == 0
     assert "CPU" in result.output
+
+
+def test_cli_gpu(runner):
+    result = runner.invoke(main, ["gpu"])
+    assert result.exit_code == 0
+    assert "GPU" in result.output
+
+
+def test_cli_gpu_advanced(runner):
+    result = runner.invoke(main, ["gpu", "-a"])
+    assert result.exit_code == 0
+    assert "GPU" in result.output
 
 
 def test_cli_ram(runner):

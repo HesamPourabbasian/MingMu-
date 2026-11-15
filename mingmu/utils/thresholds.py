@@ -87,3 +87,9 @@ SWAP_USAGE = Threshold(warning=50.0, critical=80.0)
 
 DISK_USAGE = Threshold(warning=80.0, critical=90.0)
 
+# ── GPU thresholds ───────────────────────────────────────────
+
+GPU_USAGE = Threshold(warning=80.0, critical=95.0)
+GPU_TEMPERATURE = Threshold(warning=80.0, critical=95.0)
+GPU_MEMORY = Threshold(warning=80.0, critical=95.0)
+
